@@ -20,3 +20,7 @@ joytick1 equ $BF30
 joytick2 equ $BF34
 TECRA .EQU $301A
 INASS .EQU $D42C 
+
+ macro Break
+loopBreak jmp loopBreak
+ endm

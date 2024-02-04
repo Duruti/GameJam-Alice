@@ -1,6 +1,5 @@
 updateKey
 
-Break 
    ;Break
    ldaa oldKey 
    anda #%100000
@@ -32,7 +31,7 @@ Fire
    ldaa oldKey 
    anda #%1
    bne actionFire1
- 
+endActionKey 
    rts
 
 ;*************** Action *****************

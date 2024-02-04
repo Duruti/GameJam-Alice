@@ -22,9 +22,9 @@ initGame
   jsr drawMap
    
    ; affiche le texte
-;   ldx #textGame
-;   ldd #$1010
-;   jsr drawText
+   ;   ldx #textGame
+   ;   ldd #$1010
+   ;   jsr drawText
    ldx #map+hearderLevel-4
    ldaa 0,x
    deca
@@ -37,7 +37,7 @@ initGame
    ldd #$3081 ; a=R1 b=R2
    jsr drawSprite3230
 
-; affiche la porte
+   ; affiche la porte
    ldx #map+hearderLevel-2
    ldaa 0,x
    deca
@@ -47,11 +47,10 @@ initGame
 
    ldd #$3481 ; a=R1 b=R2
    jsr drawSprite3230
-
    rts 
 updateGame
 
-   jsr vbl
+  ; jsr vbl
    jsr getKey
    jsr updateKey   
    

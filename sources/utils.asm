@@ -13,9 +13,9 @@ drawText
    stab R6 
    clra 
    staa tempoText
-drawText.loop
+drawTextloop
    ldaa 0,x
-   beq .endloop
+   beq endloop
    std R1
    ldaa #%0000000
    std R2
@@ -39,10 +39,10 @@ tempo
    clra 
    staa tempoText
 
-   jmp drawText.loop
-.endloop
+   jmp drawTextloop
+endloop
    rts
-tempoText ds 0
+;tempoText ds 0
 
 drawTextTempo
    rts
@@ -51,14 +51,21 @@ drawTextTempo
 
 
 vbl
-   ldaa R0
+    
+   ldaa #%10010101
+   staa R0+EXEC     
+
+vbl2   
+   ldaa R0;+EXEC
    bita #%00000100
- 	bne vbl
+ 	;anda #%00000100
+   bne vbl2
+
    
-   ldaa #10
-vbl.loop
+   ldaa #20
+vblloop
    deca 
    ;cmpa #0
-   bne vbl.loop
+   bne vblloop
    rts
 

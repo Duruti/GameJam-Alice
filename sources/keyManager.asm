@@ -9,17 +9,16 @@ getKey
    clra 
    staa newKey
 
-   ; Break 
-   ldaa #$FB ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
+   ; 0 remplace Break 
+   ldaa #$FE ;$FB ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
    staa PORT1
    ldaa IO ; on récupere les infos dans IO
-   anda #%01000000 ; on test le bit 2 , si il vaut 0 alors 
+   anda #%10000 ; %01000000 ; on test le bit 2 , si il vaut 0 alors 
    bne testZ ; test suivant
    ; mets le bit 3 de newKey a 1  
    ldaa #%100000
    oraa newKey
    staa newKey
-   jmp endTest
 
 testZ
    ; Z 
@@ -32,7 +31,6 @@ testZ
    ldaa #%10000
    oraa newKey
    staa newKey
-   jmp endTest
 
 testQ
    ; pour Q = gauche
@@ -83,6 +81,7 @@ testEspace
 
    ; inverse newKey pour faciliter les tests ensuite
 endTest 
+  ;
    jsr getJoystick
 
    neg newKey

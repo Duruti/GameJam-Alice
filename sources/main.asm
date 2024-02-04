@@ -7,7 +7,7 @@
  processor 6803
 std equ 1
 cart equ 2
-mode equ std
+mode equ cart
 
  if mode=std
   echo "std"
@@ -68,7 +68,6 @@ start
     ldaa #$39 ; rts
     staa 9,x 
    endif
-
    ldab #sceneGame
    jsr changeScene
    ; jsr initGame
@@ -78,6 +77,7 @@ updateCurrentScene
    jsr updateGame ; automodifié
    jmp updateCurrentScene
  else 
+
    jmp $4000  
  endif
 
@@ -125,6 +125,7 @@ newKey byte 0
 value byte 0
 statusJoy byte 0
 result byte 0 
+tempoText byte 0
 
 hearderLevel equ 2+4
 width equ 12 ;12
