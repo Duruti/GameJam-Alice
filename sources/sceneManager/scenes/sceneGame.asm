@@ -57,6 +57,8 @@ updateGame
    ldaa newKey
    staa oldKey
 
+   jsr isWin 
+
    rts 
 
 getPosition
@@ -166,6 +168,29 @@ isRight
    jmp SuiteActionD
 exitIsRight
    jmp Fire
+getIdSprite
+   ; retourne l'Id sous le player dans a 
+   ldaa Ypos
+   ldab #width
+   mul
+   tba 
+   adda Xpos
+   ldx #map+hearderLevel+(width*height)
+   tab 
+   abx 
+   ldaa 0,x
+   rts
+isWin 
+   jsr getIdSprite 
+   cmpa #2
+   bne endIsWin 
+   ldab #sceneGameOver
+   jsr changeScene
+
+endIsWin
+   rts 
+
+
 exitGame
    ldab #sceneGameOver
    jsr changeScene

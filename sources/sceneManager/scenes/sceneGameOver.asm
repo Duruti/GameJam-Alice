@@ -1,6 +1,6 @@
 initGameOver
    ; efface l'ecran
-   jsr $fbd4
+  ; jsr $fbd4
    ; affiche le texte
    ldx #textGameOver
    ldd #$1010
@@ -13,8 +13,8 @@ updateGameOver
    rts 
   
 exitGameOver
-   ldab #sceneMenu
+   ldab #sceneGame
    jsr changeScene
    rts
 
-textGameOver byte "SCENE GAMEOVER",0
+textGameOver byte "YOU WIN",0
