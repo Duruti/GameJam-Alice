@@ -41,7 +41,7 @@ start
    staa ligneMap
    ldaa #$ff 
    staa oldKey 
-   ldaa #2 
+   ldaa #1 
    staa currentLevel
    
    ldaa #80 ; efface l'écran
@@ -132,6 +132,7 @@ tempoText byte 0
 hearderLevel equ 2+4 ; 2(NbLevel + size) 4 (NbLevel + size + posPerso + posDoor)
 width equ 12 ;12
 height equ 6
+saveSP word 0
 currentLevel byte 0
 adrCurrentLevel word 0
 adrCurrentLevelSprite word 0
@@ -152,4 +153,4 @@ prgSize=end-start
  echo "X: ",Xpos
  echo "isleft ",schearchPerso 
  echo "updateGame ",updateGame 
- echo "map",map
+ echo "currentMap",currentMapSprite

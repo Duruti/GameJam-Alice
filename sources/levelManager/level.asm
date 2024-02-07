@@ -41,6 +41,7 @@ initLevel
    ldx #vide
    jsr loadDataSprite
 
+
    rts
 calcAdrCurrentLevel
    ldx #(map+2) 
@@ -125,10 +126,80 @@ endDrawMap
    rts
 loadCurrentMapSprite
    ;transfert les données du Level dans currentMapSprite
+   ldd #width*height-1
+   addd adrCurrentLevelSprite
+   std memoryTampon 
+   ldx memoryTampon
+
+   sts saveSP ; sauve la pile 
+   lds #currentMapSprite+(width*height)-1
+
+   clrb
+loopLoadCurrentMapSprite
+   ldaa 0,x 
+   dex 
+   ;cmpa #1 ; test si perso
+   ;bne suiteLoopLCMS
+  ; clra 
+suiteLoopLCMS
+   psha
+   incb 
+   cmpb #width*height
+   bne loopLoadCurrentMapSprite
    
+   lds saveSP
    rts 
+drawMapSprite
+   clrb 
+   ldx #currentMapSprite;adrCurrentLevelSprite
+loopDrawMapSprite 
+   ldaa 0,x 
+   inx 
+   cmpa #0
+   bne drawSpriteMap
+
+suiteLDMS
+   incb
+   cmpb #$48
+   bne loopDrawMapSprite   
+   rts
+
+drawSpriteMap
+   pshb
+   psha
+   
+   tba 
+   pshb
+   ;inca ; on commence a l'index 1 pour faire la div/12
+   ldab #12
+   jsr div 
+   ldaa result 
+   staa tamponY
+
+   ldab #12
+   mul 
+   pula
+   sba
+   staa tamponX
+   ; affiche sprite
+   ldab tamponY
+   jsr getPosition
 
 
+   pula
+   deca 
+   ; * 4 
+   lsla
+   lsla
+   adda #$30
+
+   ldab #$81 ; a=R1 b=R2
+   jsr drawSprite3230
+   
+   
+   pulb 
+   jmp suiteLDMS
+   
 
 
 spriteSheet incbin "sprites/spriteSheet.bin"

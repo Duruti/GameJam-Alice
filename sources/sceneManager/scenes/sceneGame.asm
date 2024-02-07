@@ -37,7 +37,10 @@ initGame
    ; decb
    ; stab Ypos 
    jsr schearchPerso
-   
+   jsr drawMapSprite
+
+   rts 
+
    ldaa Xpos
    ldab Ypos
    jsr getPosition
