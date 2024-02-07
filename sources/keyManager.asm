@@ -9,11 +9,11 @@ getKey
    clra 
    staa newKey
 
-   ; 0 remplace Break 
-   ldaa #$FE ;$FB ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
+   ; Break 
+   ldaa #$FB ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
    staa PORT1
-   ldaa IO ; on récupere les infos dans IO
-   anda #%10000 ; %01000000 ; on test le bit 2 , si il vaut 0 alors 
+   ldaa PORT2 ; on récupere les infos dans Le port2
+   anda #%10 ; %01000000 ; on test le bit 1 , si il vaut 0 alors 
    bne testZ ; test suivant
    ; mets le bit 3 de newKey a 1  
    ldaa #%100000
