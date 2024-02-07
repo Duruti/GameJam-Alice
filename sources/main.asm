@@ -41,7 +41,8 @@ start
    staa ligneMap
    ldaa #$ff 
    staa oldKey 
-
+   ldaa #2 
+   staa currentLevel
    
    ldaa #80 ; efface l'écran
    jsr $FBD6
@@ -78,7 +79,7 @@ updateCurrentScene
    jmp updateCurrentScene
  else 
 
-   jmp $4000  
+   jmp $3700  
  endif
 
 
@@ -90,6 +91,7 @@ updateCurrentScene
    include "sources/sceneManager/scenes/sceneMenu.asm"
    include "sources/utils.asm"
    include "sources/sprite.asm"
+   include "sources/math.asm"
    include "sources/keyManager.asm"
    include "sources/updateKey.asm"
    include "sources/levelManager/level.asm"
@@ -127,9 +129,14 @@ statusJoy byte 0
 result byte 0 
 tempoText byte 0
 
-hearderLevel equ 2+4
+hearderLevel equ 2+4 ; 2(NbLevel + size) 4 (NbLevel + size + posPerso + posDoor)
 width equ 12 ;12
 height equ 6
+currentLevel byte 0
+adrCurrentLevel word 0
+adrCurrentLevelSprite word 0
+currentMapSprite ds width*height,0 
+
 
 endVariable 
 
@@ -145,4 +152,4 @@ prgSize=end-start
  echo "X: ",Xpos
  echo "isleft ",schearchPerso 
  echo "updateGame ",updateGame 
- echo "initGame",initGame
+ echo "map",map

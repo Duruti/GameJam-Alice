@@ -34,7 +34,7 @@ tempo
    staa tempoText
 
 ;    inc tempoText
-   cmpa #50
+   cmpa #1
    bne tempo 
    clra 
    staa tempoText

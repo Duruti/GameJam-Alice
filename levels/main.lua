@@ -391,18 +391,18 @@ function saveLevels()
 
       file:write(string.char(#level)) -- le fichier commence par le nombre de level
       file:write(string.char(#level[1])) -- puis par la taille d'un level
-          -- perso
      for l=1,#level do     
           local pos = getPositionSprite(1,l)
+          -- perso
       
-          file:write(string.char(pos[1])) -- puis par la taille d'un level
-          file:write(string.char(pos[2])) -- puis par la taille d'un level
+          file:write(string.char(pos[1])) 
+          file:write(string.char(pos[2])) 
       
       -- door
           pos = getPositionSprite(2,l)
       
-          file:write(string.char(pos[1])) -- puis par la taille d'un level
-          file:write(string.char(pos[2])) -- puis par la taille d'un level
+          file:write(string.char(pos[1])) 
+          file:write(string.char(pos[2])) 
       
           for c=1,#level[l] do
                local value = string.char(level[l][c]) 

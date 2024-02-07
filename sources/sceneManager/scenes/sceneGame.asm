@@ -1,6 +1,6 @@
 initGame
    ; efface l'écran
-   ;jsr $fbd4
+   jsr $fbd4
    ldaa #-3
    staa colonneMap
    ldaa #8
@@ -18,27 +18,39 @@ initGame
 
    ldaa #80 ; efface l'écran
    jsr $FBD6
+
    
   jsr drawMap
    
-   ; affiche le texte
-   ;   ldx #textGame
-   ;   ldd #$1010
-   ;   jsr drawText
-   ldx #map+hearderLevel-4
-   ldaa 0,x
-   deca
-   staa Xpos
-   ldab 1,x
-   decb
-   stab Ypos 
+      
+   ; ldx adrCurrentLevel; #map+hearderLevel-4
+   ; ;-4
+   ; dex
+   ; dex
+   ; dex 
+   ; dex 
+
+   ; ldaa 0,x
+   ; deca
+   ; staa Xpos
+   ; ldab 1,x
+   ; decb
+   ; stab Ypos 
+   jsr schearchPerso
+   
+   ldaa Xpos
+   ldab Ypos
    jsr getPosition
    
    ldd #$3081 ; a=R1 b=R2
    jsr drawSprite3230
 
    ; affiche la porte
-   ldx #map+hearderLevel-2
+   ldx adrCurrentLevel
+   ;-2
+   dex
+   dex
+   ;ldx #map+hearderLevel-2
    ldaa 0,x
    deca
    ldab 1,x
@@ -93,7 +105,7 @@ isUp
    mul
    tba 
    adda Xpos
-   ldx #map+hearderLevel
+   ldx adrCurrentLevel ;map+hearderLevel
    tab 
    abx 
    ldaa 0,x
@@ -113,7 +125,7 @@ isDown
    mul
    tba 
    adda Xpos
-   ldx #map+hearderLevel
+   ldx adrCurrentLevel; map+hearderLevel
    tab 
    abx 
    ldaa 0,x
@@ -136,7 +148,7 @@ isLeft
    ;tba 
    pula
    aba ; additionne a+b -> a 
-   ldx #map+hearderLevel
+   ldx adrCurrentLevel ;map+hearderLevel
    tab 
    abx 
    ldaa 0,x
@@ -160,7 +172,7 @@ isRight
    ;tba 
    pula
    aba ; additionne a+b -> a 
-   ldx #map+hearderLevel
+   ldx adrCurrentLevel;map+hearderLevel
    tab 
    abx 
    ldaa 0,x
@@ -175,7 +187,7 @@ getIdSprite
    mul
    tba 
    adda Xpos
-   ldx #map+hearderLevel+(width*height)
+   ldx  adrCurrentLevelSprite;#map+hearderLevel+(width*height)
    tab 
    abx 
    ldaa 0,x
@@ -184,11 +196,18 @@ isWin
    jsr getIdSprite 
    cmpa #2
    bne endIsWin 
+   
+   ldaa currentLevel
+   inca 
+   anda #%11
+   staa currentLevel
+
    ldab #sceneGameOver
    jsr changeScene
-
 endIsWin
    rts 
+
+
 
 
 exitGame

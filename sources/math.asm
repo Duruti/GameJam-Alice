@@ -1,9 +1,10 @@
 div
    ; division
    ; a/b -> result
-
+   psha 
    clra 
    staa result
+   pula
 loopDiv
    sba 
    blo fin 
