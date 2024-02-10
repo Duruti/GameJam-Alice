@@ -7,8 +7,7 @@
  processor 6803
 std equ 1
 cart equ 2
-mode equ cart
-
+mode equ std
  if mode=std
   echo "std"
   org $3346
@@ -41,9 +40,13 @@ start
    staa ligneMap
    ldaa #$ff 
    staa oldKey 
-   ldaa #1 
+   ldaa #0 
    staa currentLevel
-   
+   ldaa #7
+   staa colorR3
+   ldaa colorSprite+1
+   staa colorPlayer
+
    ldaa #80 ; efface l'écran
    jsr $FBD6
 
@@ -89,6 +92,7 @@ updateCurrentScene
    include "sources/sceneManager/scenes/sceneGame.asm"
    include "sources/sceneManager/scenes/sceneGameOver.asm"
    include "sources/sceneManager/scenes/sceneMenu.asm"
+   include "sources/sceneManager/scenes/sceneNextLevel.asm"
    include "sources/utils.asm"
    include "sources/sprite.asm"
    include "sources/math.asm"
@@ -128,6 +132,10 @@ value byte 0
 statusJoy byte 0
 result byte 0 
 tempoText byte 0
+isStart byte 0
+colorR3 byte 0
+colorPlayer byte 0
+colorPiege byte 0
 
 hearderLevel equ 2+4 ; 2(NbLevel + size) 4 (NbLevel + size + posPerso + posDoor)
 width equ 12 ;12
@@ -137,7 +145,8 @@ currentLevel byte 0
 adrCurrentLevel word 0
 adrCurrentLevelSprite word 0
 currentMapSprite ds width*height,0 
-
+indexPiege byte 0
+lstPiege ds width*height*2,0
 
 endVariable 
 
@@ -153,4 +162,4 @@ prgSize=end-start
  echo "X: ",Xpos
  echo "isleft ",schearchPerso 
  echo "updateGame ",updateGame 
- echo "currentMap",currentMapSprite
+ echo "lstPiege",lstPiege

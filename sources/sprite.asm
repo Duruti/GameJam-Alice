@@ -46,7 +46,9 @@ drawSprite3230
    ; r1, a = $26 -> 0010 0100 ; tampon 9 caractere 0 ( c1 = 00 | c2=01 | c3=10 | c4=11) 
    ; r2, b = $81 -> 1000 0001
    
-   ldaa #%000000111 ; #$70
+   ;ldaa #%000000001 ; #$70
+   ldaa colorR3
+   ;oraa #%000000000
    staa R3
    ldaa #$01
    staa R0+EXEC
@@ -58,7 +60,8 @@ drawSprite3230
    ; r2, b = $81 -> 1000 0001
    inc R1
    ;std R1
-   ldaa #%000000111 ; #$70
+ ;  ldaa #%000000111 ; #$70
+   ldaa colorR3
    staa R3
    ;inc R7
    ldaa #$01
@@ -75,11 +78,12 @@ drawSprite3230
    ; r2, b = $81 -> 1000 0001
    inc R1
    ;std R1
-   ldaa #%000000111 ; #$70
+   ldaa colorR3
+  ; ldaa #%000000111 ; #$70
    staa R3
    ldaa #$01
    staa R0+EXEC
-   bsr BUSY
+   jsr BUSY
 
    
    ;ldd #$2781 ; jeu G'0
@@ -87,7 +91,8 @@ drawSprite3230
    ; r2, b = $81 -> 1000 0001
    inc R1
    ;std R1
-   ldaa #%000000111 ; #$70
+   ldaa colorR3
+;   ldaa #%000000111 ; #$70
    staa R3
    ;inc R7
    ldaa #$01
@@ -147,7 +152,16 @@ loopDrawCell
    ldaa 0,x
    ;cmpa 0 
    beq loopDrawCell
-   adda #$23
+   ; recupere la couleur
+      ; pshx
+      ; tab 
+      ; ldx #colorSprite
+      ; abx
+      ; ldab 0,x
+      ; stab colorR3
+      ; pulx
+      
+   adda #$23 ; numero de tampon
    jsr drawCarac
    jmp loopDrawCell
 UpLineDrawCell
@@ -173,6 +187,35 @@ restoreBackground
    ldab Ypos
    jsr getPosition
 
+   jsr getIdSprite
+   cmpa #1
+   ble drawVide
+   psha
+      ; recupere la couleur
+   pshx
+   tab 
+   ldx #colorSprite
+   abx
+   ldab 0,x
+   stab colorR3
+   pulx
+
+   
+   pula   
+   deca
+
+
+   lsla
+   lsla
+   adda #$30
+
+ ;  ldd #$0081 ; a=R1 b=R2
+   ldab #$81
+   jsr drawSprite3230
+   rts
+drawVide
+   ldaa #0 
+   staa colorR3
    ldd #$0081 ; a=R1 b=R2
    jsr drawSprite3230
    rts
@@ -181,7 +224,8 @@ drawPlayer
    ldaa Xpos
    ldab Ypos
    jsr getPosition
-
+   ldaa colorPlayer 
+   staa colorR3
    ldd #$3081 ; a=R1 b=R2
    jsr drawSprite3230
    rts

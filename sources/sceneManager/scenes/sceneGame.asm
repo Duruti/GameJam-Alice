@@ -8,6 +8,8 @@ initGame
    clra 
    staa Xpos
    staa Ypos
+   ldaa #1 
+   staa isStart
    
    ; affiche le texte
    ; ldx #textGame
@@ -38,43 +40,89 @@ initGame
    ; stab Ypos 
    jsr schearchPerso
    jsr drawMapSprite
-
+  
    rts 
 
-   ldaa Xpos
-   ldab Ypos
-   jsr getPosition
-   
-   ldd #$3081 ; a=R1 b=R2
-   jsr drawSprite3230
-
-   ; affiche la porte
-   ldx adrCurrentLevel
-   ;-2
-   dex
-   dex
-   ;ldx #map+hearderLevel-2
-   ldaa 0,x
-   deca
-   ldab 1,x
-   decb
-   jsr getPosition
-
-   ldd #$3481 ; a=R1 b=R2
-   jsr drawSprite3230
-   rts 
 updateGame
 
   ; jsr vbl
    jsr getKey
    jsr updateKey   
    
+   ldaa isStart
+   bne controlKey
+
+suiteUpdateGame   
    ldaa newKey
    staa oldKey
-
+   jsr isGameover
    jsr isWin 
 
+   
    rts 
+controlKey
+   ldaa newKey
+   cmpa #%11111111 
+   beq suiteUpdateGame
+   clra 
+   staa isStart
+   jsr shadowTrap
+
+   jmp suiteUpdateGame
+drawTrap
+   clrb 
+   ldx #lstPiege
+
+loopDT 
+   ldaa 0,x 
+   staa tamponX
+   ldaa 1,x 
+   staa tamponY
+   inx 
+   inx 
+
+   ldaa #1 ;colorPiege+idPiege
+   staa colorR3
+   
+   pshb
+   ldaa #idPiege
+   deca 
+   ; * 4 
+   lsla
+   lsla
+   adda #$30 
+   ldab #$81
+   jsr drawSprite3230 
+   pulb
+   incb
+   cmpb indexPiege
+   bne loopDT
+   rts 
+
+shadowTrap
+   ; efface les pieges
+   clrb 
+   ldx #lstPiege
+
+loopST 
+   ldaa 0,x 
+   staa tamponX
+   ldaa 1,x 
+   staa tamponY
+   inx 
+   inx 
+
+   clra
+   staa colorR3
+   pshb
+   ldab #$81
+   jsr drawSprite3230 
+   pulb
+   incb
+   cmpb indexPiege
+   bne loopST
+   rts
+
 
 getPosition
    ; calcul la position a l'ecran par caractere
@@ -195,6 +243,15 @@ getIdSprite
    abx 
    ldaa 0,x
    rts
+isGameover
+   jsr getIdSprite 
+   cmpa #3
+   bne endIsWin 
+   
+   ldab #sceneGameOver
+   jsr changeScene
+   rts
+
 isWin 
    jsr getIdSprite 
    cmpa #2
@@ -205,7 +262,7 @@ isWin
    anda #%11
    staa currentLevel
 
-   ldab #sceneGameOver
+   ldab #sceneNextLevel
    jsr changeScene
 endIsWin
    rts 

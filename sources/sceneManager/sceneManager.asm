@@ -3,8 +3,10 @@
 sceneMenu equ 0 
 sceneGame equ 1
 sceneGameOver equ 2
-adrUpdateScene word updateMenu,updateGame,updateGameOver
-adrInitScene word initMenu,initGame,initGameOver
+sceneNextLevel equ 3
+
+adrUpdateScene word updateMenu,updateGame,updateGameOver,updateNextLevel
+adrInitScene word initMenu,initGame,initGameOver,initNextLevel
 
 
 changeScene 

@@ -1,20 +1,21 @@
-initGameOver
+initNextLevel
    ; efface l'ecran
   ; jsr $fbd4
    ; affiche le texte
-   ldx #textGameOver
+   jsr drawTrap
+   ldx #textNextLevel
    ldd #$1010
    jsr drawText
    rts 
-updateGameOver
+updateNextLevel
    jsr INPUTKEY
    cmpa #$20
-   beq exitGameOver
+   beq exitNextLevel
    rts 
   
-exitGameOver
+exitNextLevel
    ldab #sceneGame
    jsr changeScene
    rts
 
-textGameOver byte "GAMEOVER",0
+textNextLevel byte "YOU WIN",0

@@ -2,7 +2,7 @@
 initLevel 
    jsr calcAdrCurrentLevel
    jsr loadCurrentMapSprite
-
+   jsr getTrap
    ; Charge les graphismes dans l'EF9345
 
    ldd #$09c0 ; a=R4 et b = R5
@@ -34,7 +34,24 @@ initLevel
    ldx #door+2
    jsr loadDataSprite
 
-  
+   ldd #$0Ec0 ; a=R4 et b = R5
+   std memoryTampon
+   ;std startLoop+1
+   ldx #piege+2
+   jsr loadDataSprite
+
+   ldd #$0Fc0 ; a=R4 et b = R5
+   std memoryTampon
+   ;std startLoop+1
+   ldx #decor1+2
+   jsr loadDataSprite
+
+   ldd #$10c0 ; a=R4 et b = R5
+   std memoryTampon
+   ;std startLoop+1
+   ldx #decor2+2
+   jsr loadDataSprite
+
    ldd #$00c0 ; a=R4 et b = R5
    std memoryTampon
    ;std startLoop+1
@@ -90,7 +107,70 @@ foundPerso
    staa Xpos
 endSchearchPerso 
    rts
-   ; DESSINE LA MAP 
+; recherche les pièges
+
+getTrap
+
+   ; parcours la map à la recherche de pièges 
+   clra 
+   staa indexPiege
+   ldx #lstPiege
+   stx adrTampon
+   ldx #currentMapSprite
+   clrb
+;l jmp l
+loopGetTrap
+   ldaa 0,x
+   cmpa #idPiege
+   beq addPiege
+suiteLGT
+   inx 
+   incb
+   cmpb #width*height
+   bne loopGetTrap
+   rts
+
+addPiege
+   pshx
+   jsr calcPositionTrap
+  
+   ldx adrTampon
+   ldaa tamponX
+   staa 0,x 
+   inx 
+   ldaa tamponY
+   staa 0,x 
+   inx
+   stx adrTampon
+
+   inc indexPiege
+   pulx
+   jmp suiteLGT
+
+calcPositionTrap
+   pshb
+   tba 
+   pshb
+   ;inca ; on commence a l'index 1 pour faire la div/12
+   ldab #12
+   jsr div 
+   ldaa result 
+   staa tamponY
+
+   ldab #12
+   mul 
+   pula
+   sba
+   staa tamponX
+   ; affiche sprite
+   ldab tamponY
+   jsr getPosition
+   
+   pulb
+   rts 
+
+; DESSINE LA MAP 
+
 drawMap
 
    ldx  adrCurrentLevel;#map-1+hearderLevel 
@@ -124,6 +204,11 @@ UpLine
    bra loopColonne
 endDrawMap
    rts
+
+; Charge la map du jeu
+
+
+
 loadCurrentMapSprite
    ;transfert les données du Level dans currentMapSprite
    ldd #width*height-1
@@ -149,6 +234,7 @@ suiteLoopLCMS
    
    lds saveSP
    rts 
+
 drawMapSprite
    clrb 
    ldx #currentMapSprite;adrCurrentLevelSprite
@@ -187,6 +273,16 @@ drawSpriteMap
 
 
    pula
+   ; recupere la couleur
+   pshx
+   tab 
+   ldx #colorSprite
+   abx
+   ldab 0,x
+   stab colorR3
+   pulx
+
+
    deca 
    ; * 4 
    lsla
@@ -205,6 +301,18 @@ drawSpriteMap
 spriteSheet incbin "sprites/spriteSheet.bin"
 sprite incbin "sprites/perso.bin"
 door incbin "sprites/door.bin"
+piege incbin "sprites/piege.bin"
+decor1 incbin "sprites/decor1.bin"
+decor2 incbin "sprites/decor2.bin"
 cells incbin "levels/tiles.bin"
 map incbin "levels/level.bin"
+
+idVide   equ 0
+idPerso  equ 1
+idDoor   equ 2
+idPiege  equ 3
+idDecor1 equ 4
+idDecor2 equ 5
+
+colorSprite byte 0,2,%00000110,1,2,%00000111
 

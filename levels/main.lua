@@ -5,6 +5,12 @@ love.graphics.setDefaultFilter("nearest")
 
 local door = love.graphics.newImage("door.png")
 local perso = love.graphics.newImage("perso.png")
+local piege = love.graphics.newImage("piege.png")
+local decor1 = love.graphics.newImage("decor1.png")
+local decor2 = love.graphics.newImage("decor2.png")
+
+lstButton = {perso,door,piege,decor1,decor2}
+
 name = "spriteSheet"
 local img = love.graphics.newImage(name..".png")
 width = img:getWidth()/8
@@ -267,11 +273,26 @@ function love.load()
      windowCurrentLevel=newButton(panel.x+300,panel.y,50,40,"1",downLevels)
      
      -- perso et door
-     table.insert(sprites,newButton(panel.x+200,panel.y+100,16*sizeSprite,20*sizeSprite,"",actionSprite,perso,1))
-     table.insert(sprites,newButton(panel.x+200+16*sizeSprite+2,panel.y+100,16*sizeSprite,20*sizeSprite,"",actionSprite,door,2))
-     table.insert(imgSprites,perso)
-     table.insert(imgSprites,door)
+--     table.insert(sprites,newButton(panel.x+200,panel.y+100,16*sizeSprite,20*sizeSprite,"",actionSprite,perso,1))
+--     table.insert(sprites,newButton(panel.x+200+16*sizeSprite+2,panel.y+100,16*sizeSprite,20*sizeSprite,"",actionSprite,door,2))
+--     table.insert(sprites,newButton(panel.x+200+32*sizeSprite+2,panel.y+100,16*sizeSprite,20*sizeSprite,"",actionSprite,piege,3))
+--     table.insert(imgSprites,perso)
+--     table.insert(imgSprites,door)
+--     table.insert(imgSprites,piege)
      
+     local indexButton = 1
+     
+     for l=1,math.floor(#lstButton/4)+1 do 
+          for c=1,4 do
+          if indexButton<=#lstButton then 
+          local b = lstButton[indexButton]
+          table.insert(sprites,newButton(panel.x+200+16*sizeSprite*(c-1)+2,panel.y+100+20*sizeSprite*(l-1),16*sizeSprite,20*sizeSprite,"",actionSprite,b,indexButton))
+          table.insert(imgSprites,b)
+          indexButton = indexButton + 1
+          end
+          end
+     end
+
 end
 function actionSprite(self)
      print(self.index)
@@ -641,8 +662,8 @@ function love.draw()
 end
 
 function love.mousepressed( x, y, button)
-    for k, button in pairs(buttons) do
-        button:action(x,y)
+    for k, s in pairs(buttons) do
+        s:action(x,y,button)
     end
 -- Zone selection Tiles
     local x1 = (size*8*4+2)*(maxColonne)
@@ -677,7 +698,13 @@ function love.mousepressed( x, y, button)
           mapSprite[currentLevel][(l-1)*rowsLevel+c] = indexSprite
         
         elseif  indexSprite>=3 then
-               mapSprite[currentLevel][(l-1)*rowsLevel+c] = indexSprite
+              
+               if button == 1 then 
+                    mapSprite[currentLevel][(l-1)*rowsLevel+c] = indexSprite
+               elseif button ==2 then 
+                    mapSprite[currentLevel][(l-1)*rowsLevel+c] = 0
+             end
+              
    
         else
                if button == 1 then 
