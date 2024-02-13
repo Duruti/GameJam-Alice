@@ -40,7 +40,7 @@ drawSprite3230
    staa R6
    ldaa tamponX
    staa R7
-; 4 Affichage du caractere
+ ; 4 Affichage du caractere
    
    ;ldd #$2481 ; jeu G'0
    ; r1, a = $26 -> 0010 0100 ; tampon 9 caractere 0 ( c1 = 00 | c2=01 | c3=10 | c4=11) 
@@ -92,7 +92,7 @@ drawSprite3230
    inc R1
    ;std R1
    ldaa colorR3
-;   ldaa #%000000111 ; #$70
+ ;   ldaa #%000000111 ; #$70
    staa R3
    ;inc R7
    ldaa #$01
@@ -214,7 +214,7 @@ restoreBackground
    jsr drawSprite3230
    rts
 drawVide
-   ldaa #0 
+   ldaa #%110000 
    staa colorR3
    ldd #$0081 ; a=R1 b=R2
    jsr drawSprite3230

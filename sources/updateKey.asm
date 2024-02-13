@@ -51,7 +51,10 @@ actionZ
    jmp isUp
 
 SuiteActionZ
+
    jsr restoreBackground
+   ldaa Ypos
+   staa oldPosY
 
    dec Ypos
    
@@ -67,6 +70,8 @@ actionQ
 SuiteActionQ 
  
    jsr restoreBackground
+   ldaa Xpos
+   staa oldPosX
    
    dec Xpos
    jsr drawPlayer
@@ -81,6 +86,10 @@ actionS
 SuiteActionS 
  
    jsr restoreBackground
+   
+   ldaa Ypos
+   staa oldPosY
+   
    inc Ypos
  
    jsr drawPlayer
@@ -94,6 +103,10 @@ actionD
 SuiteActionD 
 
    jsr restoreBackground
+   
+   ldaa Xpos
+   staa oldPosX
+   
    inc Xpos
 
 

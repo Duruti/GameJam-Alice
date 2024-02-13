@@ -48,13 +48,31 @@ initLevel
 
    ldd #$10c0 ; a=R4 et b = R5
    std memoryTampon
-   ;std startLoop+1
    ldx #decor2+2
+   jsr loadDataSprite
+
+   ldd #$11c0 ; a=R4 et b = R5
+   std memoryTampon
+   ldx #bonus+2
+   jsr loadDataSprite
+
+   ldd #$12c0 ; a=R4 et b = R5
+   std memoryTampon
+   ldx #torche+2
+   jsr loadDataSprite
+
+   ldd #$13c0 ; a=R4 et b = R5
+   std memoryTampon
+   ldx #ghostleft+2
+   jsr loadDataSprite
+
+   ldd #$14c0 ; a=R4 et b = R5
+   std memoryTampon
+   ldx #ghostright+2
    jsr loadDataSprite
 
    ldd #$00c0 ; a=R4 et b = R5
    std memoryTampon
-   ;std startLoop+1
    ldx #vide
    jsr loadDataSprite
 
@@ -304,6 +322,12 @@ door incbin "sprites/door.bin"
 piege incbin "sprites/piege.bin"
 decor1 incbin "sprites/decor1.bin"
 decor2 incbin "sprites/decor2.bin"
+bonus incbin "sprites/bonus.bin"
+torche incbin "sprites/torche.bin"
+ghostleft incbin "sprites/ghostleft.bin"
+ghostright incbin "sprites/ghostright.bin"
+
+
 cells incbin "levels/tiles.bin"
 map incbin "levels/level.bin"
 
@@ -313,6 +337,10 @@ idDoor   equ 2
 idPiege  equ 3
 idDecor1 equ 4
 idDecor2 equ 5
+idBonus  equ 6
+idTorche equ 7
+idGhostleft equ 8
+idGhostright equ 9
 
-colorSprite byte 0,2,%00000110,1,2,%00000111
+colorSprite byte 0,2,%00000110,1,2,%00000111,5,3,1,1
 

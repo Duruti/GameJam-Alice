@@ -8,8 +8,12 @@ local perso = love.graphics.newImage("perso.png")
 local piege = love.graphics.newImage("piege.png")
 local decor1 = love.graphics.newImage("decor1.png")
 local decor2 = love.graphics.newImage("decor2.png")
+local bonus = love.graphics.newImage("bonus.png")
+local torche = love.graphics.newImage("torche.png")
+local ghostleft = love.graphics.newImage("ghostleft.png")
+local ghostright = love.graphics.newImage("ghostright.png")
 
-lstButton = {perso,door,piege,decor1,decor2}
+lstButton = {perso,door,piege,decor1,decor2,bonus,torche,ghostleft,ghostright}
 
 name = "spriteSheet"
 local img = love.graphics.newImage(name..".png")

@@ -29,23 +29,26 @@ start
    jsr INASS
 
    ; copie variable
-   ldaa #-3
-   staa colonneMap
-   ldaa #2
-   staa nbLine
-   ldaa #4-1
-   staa nbByte 
-   ldaa #8
-   staa ligne
-   staa ligneMap
-   ldaa #$ff 
-   staa oldKey 
-   ldaa #0 
-   staa currentLevel
-   ldaa #7
-   staa colorR3
-   ldaa colorSprite+1
-   staa colorPlayer
+  ldaa #-3
+  staa colonneMap
+  ldaa #2
+  staa nbLine
+  ldaa #4-1
+  staa nbByte 
+  ldaa #8
+  staa ligne
+  staa ligneMap
+  ldaa #$ff 
+  staa oldKey 
+  ldaa #0 
+  staa currentLevel
+  ldaa #7
+  staa colorR3
+  ldaa colorSprite+1
+  staa colorPlayer
+  clra
+  staa scoreBonus
+
 
    ldaa #80 ; efface l'écran
    jsr $FBD6
@@ -120,6 +123,8 @@ tamponX byte 0;10
 tamponY byte 0;20
 Xpos byte 0 ; position par case
 Ypos byte 0
+oldPosX byte 0
+oldPosY byte 0
 ligne byte 8
 colonne byte 0
 ligneMap byte 8
@@ -133,6 +138,7 @@ statusJoy byte 0
 result byte 0 
 tempoText byte 0
 isStart byte 0
+scoreBonus byte 0
 colorR3 byte 0
 colorPlayer byte 0
 colorPiege byte 0
@@ -162,4 +168,4 @@ prgSize=end-start
  echo "X: ",Xpos
  echo "isleft ",schearchPerso 
  echo "updateGame ",updateGame 
- echo "lstPiege",lstPiege
+ echo "currentMap",currentMapSprite

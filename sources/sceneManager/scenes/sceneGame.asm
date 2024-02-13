@@ -18,6 +18,8 @@ initGame
    
    jsr initLevel
 
+
+
    ldaa #80 ; efface l'écran
    jsr $FBD6
 
@@ -40,7 +42,15 @@ initGame
    ; stab Ypos 
    jsr schearchPerso
    jsr drawMapSprite
-  
+   ldaa Xpos
+   staa oldPosX 
+   ldaa Ypos
+   staa oldPosY
+
+   ldx #textBonus
+   ldd #$111D
+   jsr drawText
+   jsr drawScoreBonus
    rts 
 
 updateGame
@@ -48,13 +58,17 @@ updateGame
   ; jsr vbl
    jsr getKey
    jsr updateKey   
-   
+  
    ldaa isStart
    bne controlKey
 
 suiteUpdateGame   
+   jsr isBonus
+   jsr isTorche
+   
    ldaa newKey
    staa oldKey
+ 
    jsr isGameover
    jsr isWin 
 
@@ -62,7 +76,10 @@ suiteUpdateGame
    rts 
 controlKey
    ldaa newKey
-   cmpa #%11111111 
+   cmpa oldKey ;#%11111111 
+   beq suiteUpdateGame
+   ldaa newKey
+   cmpa #%11111111
    beq suiteUpdateGame
    clra 
    staa isStart
@@ -238,14 +255,34 @@ getIdSprite
    mul
    tba 
    adda Xpos
-   ldx  adrCurrentLevelSprite;#map+hearderLevel+(width*height)
+   ldx #currentMapSprite; adrCurrentLevelSprite;#map+hearderLevel+(width*height)
    tab 
    abx 
    ldaa 0,x
    rts
+isBonus
+   jsr getIdSprite 
+   cmpa #idBonus
+   bne endIsBonus 
+   inc scoreBonus
+   jsr drawScoreBonus
+   jsr eraseSprite
+endIsBonus
+   rts 
+isTorche
+   jsr getIdSprite 
+   cmpa #idTorche
+   bne endIsTorche 
+   ldaa #1
+   staa isStart
+   jsr drawTrap
+   jsr eraseSprite
+endIsTorche
+   rts 
+
 isGameover
    jsr getIdSprite 
-   cmpa #3
+   cmpa #idPiege
    bne endIsWin 
    
    ldab #sceneGameOver
@@ -267,15 +304,36 @@ isWin
 endIsWin
    rts 
 
-
+eraseSprite
+   ; efface dans la map le sprite
+   ; calcul de l'index = Ypos*12 + Xpos 
+   ldaa Ypos 
+   ldab #12
+   mul  
+   addb Xpos
+   ; on a dans b l'index
+   ldx #currentMapSprite
+   abx 
+   clra 
+   staa 0,x 
+   rts
 
 
 exitGame
    ldab #sceneGameOver
    jsr changeScene
    rts
-
+drawScoreBonus
+   ldd $1616
+   std $3280
+   ldab scoreBonus
+   clra 
+   ;adda #$30
+   ;jsr $F9C6
+   jsr $F419
+   rts
 textGame byte "SCENE GAME",0
+textBonus byte "BONUS",0
 vide 
    byte $FF,$FF,$FF,$FF
    byte $FF,$FF,$FF,$FF
