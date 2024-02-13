@@ -51,23 +51,37 @@ drawTextTempo
 
 
 vbl
-    
-   ldaa #%10010101
-   staa R0+EXEC     
 
-vbl2   
-   ldaa R0;+EXEC
-   bita #%00000100
- 	;anda #%00000100
-   bne vbl2
+vbl0 ; attend que Vsync soit a 0
+   ldaa R0
+   anda #%00000100
+ 	bne vbl0
+vbl1 ; attend que Vsync soit a 1
+   ldaa R0
+   anda #%00000100
+ 	beq vbl1
+   
+   rts 
+
+
+
+
+;    ldaa #%10010101
+;    staa R0+EXEC     
+
+; vbl2   
+;    ldaa R0;+EXEC
+;    bita #%00000100
+;  	;anda #%00000100
+;    bne vbl2
 
    
-   ldaa #20
-vblloop
-   deca 
-   ;cmpa #0
-   bne vblloop
-   rts
+;    ldaa #20
+; vblloop
+;    deca 
+;    ;cmpa #0
+;    bne vblloop
+;    rts
 
 CopyData
-   
+

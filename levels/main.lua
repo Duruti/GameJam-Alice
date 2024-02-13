@@ -12,8 +12,10 @@ local bonus = love.graphics.newImage("bonus.png")
 local torche = love.graphics.newImage("torche.png")
 local ghostleft = love.graphics.newImage("ghostleft.png")
 local ghostright = love.graphics.newImage("ghostright.png")
+local ghostup = love.graphics.newImage("ghostup.png")
+local ghostdown = love.graphics.newImage("ghostdown.png")
 
-lstButton = {perso,door,piege,decor1,decor2,bonus,torche,ghostleft,ghostright}
+lstButton = {perso,door,piege,decor1,decor2,bonus,torche,ghostleft,ghostright,ghostup,ghostdown}
 
 name = "spriteSheet"
 local img = love.graphics.newImage(name..".png")
@@ -248,7 +250,7 @@ function love.load()
 
      loadTiles()
      newLevels()
-     loadLevels()
+    -- loadLevels()
      --mapSprite=newMapSprite()
 --     mapSprite[2] = 1
    

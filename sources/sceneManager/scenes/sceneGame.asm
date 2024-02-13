@@ -51,21 +51,28 @@ initGame
    ldd #$111D
    jsr drawText
    jsr drawScoreBonus
+
+   clra 
+   staa tempoGhost
+   jsr drawGhosts
+
    rts 
 
 updateGame
 
-  ; jsr vbl
+   jsr vbl
    jsr getKey
    jsr updateKey   
+   jsr updateGhost
   
    ldaa isStart
    bne controlKey
 
 suiteUpdateGame   
+   
    jsr isBonus
    jsr isTorche
-   
+
    ldaa newKey
    staa oldKey
  
@@ -87,6 +94,8 @@ controlKey
 
    jmp suiteUpdateGame
 drawTrap
+   ldaa indexPiege
+   beq endDrawTrap
    clrb 
    ldx #lstPiege
 
@@ -114,6 +123,7 @@ loopDT
    incb
    cmpb indexPiege
    bne loopDT
+endDrawTrap
    rts 
 
 shadowTrap
@@ -283,8 +293,14 @@ endIsTorche
 isGameover
    jsr getIdSprite 
    cmpa #idPiege
-   bne endIsWin 
+   beq trueGameover
    
+   jsr isGhost 
+   cmpa #1 
+   beq trueGameover 
+   
+   rts 
+trueGameover
    ldab #sceneGameOver
    jsr changeScene
    rts

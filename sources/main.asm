@@ -21,12 +21,25 @@ mode equ std
 
 start
 
+ 
    clr $00E8
    include "sources/constante.asm"
    ldaa #$01
    staa TECRA 
    clra
    jsr INASS
+
+  ; CONFIGURE LA Vsync
+   ldaa #%10000001 ; veux ecrire dans le TGS via R1 
+   staa R0
+   ldaa #%10000 ; passe TGS4 à 1 
+   staa R1+EXEC 
+   jsr busy 
+
+   ldaa #%10010101 ; passe en VRM pour se synchroniser sur 
+   staa R0+EXEC 
+   jsr busy
+
 
    ; copie variable
   ldaa #-3
@@ -101,6 +114,7 @@ updateCurrentScene
    include "sources/math.asm"
    include "sources/keyManager.asm"
    include "sources/updateKey.asm"
+   include "sources/ghost.asm"
    include "sources/levelManager/level.asm"
 
  if mode=cart 
@@ -152,6 +166,10 @@ adrCurrentLevel word 0
 adrCurrentLevelSprite word 0
 currentMapSprite ds width*height,0 
 indexPiege byte 0
+indexGhost byte 0
+tempoGhost byte 0
+
+lstGhost ds 50,0
 lstPiege ds width*height*2,0
 
 endVariable 
@@ -166,6 +184,6 @@ prgSize=end-start
 
  echo "size :",prgSize 
  echo "X: ",Xpos
- echo "isleft ",schearchPerso 
- echo "updateGame ",updateGame 
- echo "currentMap",currentMapSprite
+ echo "Y ",Ypos 
+ echo "currentmap ",currentMapSprite 
+ echo "lstGhost",lstGhost

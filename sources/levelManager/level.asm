@@ -3,6 +3,7 @@ initLevel
    jsr calcAdrCurrentLevel
    jsr loadCurrentMapSprite
    jsr getTrap
+   jsr getGhost
    ; Charge les graphismes dans l'EF9345
 
    ldd #$09c0 ; a=R4 et b = R5
@@ -71,6 +72,16 @@ initLevel
    ldx #ghostright+2
    jsr loadDataSprite
 
+   ldd #$15c0 ; a=R4 et b = R5
+   std memoryTampon
+   ldx #ghostup+2
+   jsr loadDataSprite
+
+   ldd #$16c0 ; a=R4 et b = R5
+   std memoryTampon
+   ldx #ghostdown+2
+   jsr loadDataSprite
+
    ldd #$00c0 ; a=R4 et b = R5
    std memoryTampon
    ldx #vide
@@ -110,9 +121,10 @@ loopSchearch
    inx 
    jmp loopSchearch
 foundPerso
+   ; a partir de b on calcul la colonne et la ligne dans le tableau
    tba 
    pshb
-   inca ; on commence a l'index 1 pour faire la div/12
+  ; inca ; on commence a l'index 1 pour faire la div/12
    ldab #12
    jsr div 
    ldaa result 
@@ -136,7 +148,6 @@ getTrap
    stx adrTampon
    ldx #currentMapSprite
    clrb
-;l jmp l
 loopGetTrap
    ldaa 0,x
    cmpa #idPiege
@@ -326,6 +337,8 @@ bonus incbin "sprites/bonus.bin"
 torche incbin "sprites/torche.bin"
 ghostleft incbin "sprites/ghostleft.bin"
 ghostright incbin "sprites/ghostright.bin"
+ghostup incbin "sprites/ghostup.bin"
+ghostdown incbin "sprites/ghostdown.bin"
 
 
 cells incbin "levels/tiles.bin"
@@ -341,6 +354,8 @@ idBonus  equ 6
 idTorche equ 7
 idGhostleft equ 8
 idGhostright equ 9
+idGhostup equ 10
+idGhostdown equ 11
 
 colorSprite byte 0,2,%00000110,1,2,%00000111,5,3,1,1
 

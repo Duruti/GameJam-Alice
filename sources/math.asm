@@ -7,13 +7,12 @@ div
    pula
 loopDiv
    sba 
-   blo fin 
+   blo finLoopDiv 
    inc result
    jmp loopDiv
-fin
+finLoopDiv
    rts 
 
 
-   ldaa #$FF
 
 ; result byte 0
