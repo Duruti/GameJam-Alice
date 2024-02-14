@@ -1,7 +1,7 @@
 -- Cette ligne permet d'afficher des traces dans la console pendant l'éxécution
 io.stdout:setvbuf('no')
 
-name = "ghostdown"
+name = "moveleft"
 local img = love.graphics.newImage(name..".png")
 local data = love.image.newImageData(name..".png")
  size = 3

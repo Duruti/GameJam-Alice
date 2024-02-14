@@ -14,8 +14,15 @@ local ghostleft = love.graphics.newImage("ghostleft.png")
 local ghostright = love.graphics.newImage("ghostright.png")
 local ghostup = love.graphics.newImage("ghostup.png")
 local ghostdown = love.graphics.newImage("ghostdown.png")
+local cadenas = love.graphics.newImage("cadenas.png")
+local key = love.graphics.newImage("key.png")
+local moveup = love.graphics.newImage("moveup.png")
+local moveright = love.graphics.newImage("moveright.png")
+local movedown = love.graphics.newImage("movedown.png")
+local moveleft = love.graphics.newImage("moveleft.png")
 
-lstButton = {perso,door,piege,decor1,decor2,bonus,torche,ghostleft,ghostright,ghostup,ghostdown}
+lstButton = {perso,door,piege,decor1,decor2,bonus,torche,ghostleft,ghostright,ghostup,ghostdown,
+             key,cadenas,moveup,moveright,movedown,moveleft  }
 
 name = "spriteSheet"
 local img = love.graphics.newImage(name..".png")

@@ -4,6 +4,8 @@ initLevel
    jsr loadCurrentMapSprite
    jsr getTrap
    jsr getGhost
+   jsr getKeyAndPadlock
+
    ; Charge les graphismes dans l'EF9345
 
    ldd #$09c0 ; a=R4 et b = R5
@@ -81,6 +83,37 @@ initLevel
    std memoryTampon
    ldx #ghostdown+2
    jsr loadDataSprite
+
+   ldd #$17c0 ; a=R4 et b = R5
+   std memoryTampon
+   ldx #key+2
+   jsr loadDataSprite
+
+   ldd #$18c0 ; a=R4 et b = R5
+   std memoryTampon
+   ldx #padlock+2
+   jsr loadDataSprite
+
+   ldd #$19c0 ; a=R4 et b = R5
+   std memoryTampon
+   ldx #moveup+2
+   jsr loadDataSprite
+
+   ldd #$1Ac0 ; a=R4 et b = R5
+   std memoryTampon
+   ldx #moveright+2
+   jsr loadDataSprite
+
+   ldd #$1Bc0 ; a=R4 et b = R5
+   std memoryTampon
+   ldx #movedown+2
+   jsr loadDataSprite
+
+   ldd #$1Cc0 ; a=R4 et b = R5
+   std memoryTampon
+   ldx #moveleft+2
+   jsr loadDataSprite
+
 
    ldd #$00c0 ; a=R4 et b = R5
    std memoryTampon
@@ -327,6 +360,8 @@ drawSpriteMap
    
 
 
+dataSprite 
+
 spriteSheet incbin "sprites/spriteSheet.bin"
 sprite incbin "sprites/perso.bin"
 door incbin "sprites/door.bin"
@@ -339,10 +374,20 @@ ghostleft incbin "sprites/ghostleft.bin"
 ghostright incbin "sprites/ghostright.bin"
 ghostup incbin "sprites/ghostup.bin"
 ghostdown incbin "sprites/ghostdown.bin"
+key incbin "sprites/key.bin"
+padlock incbin "sprites/cadenas.bin"
+moveup incbin "sprites/moveup.bin"
+moveright incbin "sprites/moveright.bin"
+movedown incbin "sprites/movedown.bin"
+moveleft incbin "sprites/moveleft.bin"
 
 
 cells incbin "levels/tiles.bin"
+endDataSprite
+
+; 20 Levels
 map incbin "levels/level.bin"
+memoryMap ds 2348/2,0
 
 idVide   equ 0
 idPerso  equ 1
@@ -356,6 +401,12 @@ idGhostleft equ 8
 idGhostright equ 9
 idGhostup equ 10
 idGhostdown equ 11
+idKey    equ 12
+idPadlock equ 13
+idMoveUp equ 14
+idMoveRight equ 15
+idMoveDown equ 16
+idMoveLeft equ 17
 
-colorSprite byte 0,2,%00000110,1,2,%00000111,5,3,1,1
+colorSprite byte 0,2,%00000110,1,2,%00000111,5,3,1,1,1,1,3,5,7,7,7,7
 

@@ -72,6 +72,7 @@ suiteUpdateGame
    
    jsr isBonus
    jsr isTorche
+   jsr isKey
 
    ldaa newKey
    staa oldKey
@@ -177,7 +178,16 @@ isUp
    ldaa Ypos
    beq exitIsUp ; si c'est a 0 alors pas possible
    ;jmp SuiteActionZ
-   
+   deca
+   ; control s'il y a un cadenas
+   ldab indexKey
+   beq nextIsUp ; si pas d'index alors on poursuit le test
+   jsr isPadlockY ; sinon on regarde
+   cmpa #1
+   beq exitIsUp
+
+nextIsUp
+   ldaa Ypos
    deca ; sinon descend d'une ligne 
    ldab #width
    mul
@@ -192,12 +202,22 @@ isUp
 exitIsUp
    jmp Q
 isDown 
-   ; control que c'est possible de monter 
+   ; control que c'est possible de descendre 
    ldaa Ypos
    cmpa #height-1
    beq exitIsDown ; si c'est a 0 alors pas possible
    ;jmp SuiteActionZ
-   
+
+   inca
+   ; control s'il y a un cadenas
+   ldab indexKey
+   beq nextIsDown ; si pas d'index alors on poursuit le test
+   jsr isPadlockY ; sinon on regarde
+   cmpa #1
+   beq exitIsDown
+
+nextIsDown
+   ldaa Ypos
    inca ; sinon descend d'une ligne 
    ldab #width
    mul
@@ -216,7 +236,16 @@ isLeft
    ldaa Xpos
    beq exitIsLeft ; si c'est a 0 alors pas possible
    
-   ;jmp SuiteActionZ
+   deca
+   ldab indexKey
+   beq nextIsLeft ; si pas d'index alors on poursuit le test
+   jsr isPadlockX ; sinon on regarde
+   cmpa #1
+   beq exitIsLeft
+
+nextIsLeft
+
+   ldaa Xpos
    deca ; sinon descend d'une ligne 
    psha
    ldaa Ypos
@@ -240,7 +269,17 @@ isRight
    cmpa #width-1
    beq exitIsRight ; si c'est a 0 alors pas possible
    
-   ;jmp SuiteActionZ
+
+   inca
+   ldab indexKey
+   beq nextIsRight ; si pas d'index alors on poursuit le test
+   jsr isPadlockX ; sinon on regarde
+   cmpa #1
+   beq exitIsRight
+
+nextIsRight
+
+   ldaa Xpos
    inca ; sinon descend d'une ligne 
    psha
    ldaa Ypos

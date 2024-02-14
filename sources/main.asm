@@ -20,7 +20,7 @@ mode equ std
  endif
 
 start
-
+  
  
    clr $00E8
    include "sources/constante.asm"
@@ -115,6 +115,8 @@ updateCurrentScene
    include "sources/keyManager.asm"
    include "sources/updateKey.asm"
    include "sources/ghost.asm"
+   include "sources/key.asm"
+
    include "sources/levelManager/level.asm"
 
  if mode=cart 
@@ -139,6 +141,8 @@ Xpos byte 0 ; position par case
 Ypos byte 0
 oldPosX byte 0
 oldPosY byte 0
+XPadlock byte 0
+YPadlock byte 0
 ligne byte 8
 colonne byte 0
 ligneMap byte 8
@@ -167,10 +171,12 @@ adrCurrentLevelSprite word 0
 currentMapSprite ds width*height,0 
 indexPiege byte 0
 indexGhost byte 0
+indexKey byte 0
 tempoGhost byte 0
 
 lstGhost ds 50,0
 lstPiege ds width*height*2,0
+lstKey ds 5*2 ,0
 
 endVariable 
 
@@ -183,7 +189,8 @@ prgSize=end-start
  echo "end: ",end
 
  echo "size :",prgSize 
- echo "X: ",Xpos
+ echo "X: ",XPadlock
  echo "Y ",Ypos 
  echo "currentmap ",currentMapSprite 
- echo "lstGhost",lstGhost
+ echo "lstKey ",lstKey
+ echo "datasprite ",endDataSprite-dataSprite
