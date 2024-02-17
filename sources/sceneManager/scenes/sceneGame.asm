@@ -61,18 +61,22 @@ initGame
 updateGame
 
    jsr vbl
+   ldaa statusAutomaticMove
+   bne jmpMovePlayerAutomatic
    jsr getKey
    jsr updateKey   
-   jsr updateGhost
   
    ldaa isStart
    bne controlKey
 
+escapeKey
 suiteUpdateGame   
    
+   jsr isAutomaticMove
    jsr isBonus
    jsr isTorche
    jsr isKey
+   jsr updateGhost
 
    ldaa newKey
    staa oldKey
@@ -82,6 +86,8 @@ suiteUpdateGame
 
    
    rts 
+jmpMovePlayerAutomatic
+   jmp MovePlayerAutomatic
 controlKey
    ldaa newKey
    cmpa oldKey ;#%11111111 

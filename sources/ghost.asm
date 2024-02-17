@@ -81,6 +81,10 @@ calcPositionGhost
 ; Gere la liste des ghosts
 
 updateGhost
+   
+   ldaa isStart
+   bne endUpdateGhost1
+   
    ; controle si il y a une liste de ghost
    ldaa indexGhost
    beq endUpdateGhost1

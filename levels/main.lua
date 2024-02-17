@@ -37,6 +37,8 @@ imgSprites = {}
 currentLevel = 0
 indexSprite = 0
 mapSprite = {}
+
+local statusGrid = true
 local rowsLevel = 12
 local lineLevel = 6 
  local size = 2
@@ -45,6 +47,7 @@ local lineLevel = 6
   local sizeSprite = 3
  local level = {}
  
+ local red = {1,0,0,0.7}
 --                {
 --                    0,0,0,0,0,0,0,0,0,0,
 --                    0,0,0,0,0,0,0,0,0,0,
@@ -273,12 +276,13 @@ function love.load()
      end
      local panel = { x = 600, y = 0}
     
-     newButton(panel.x,panel.y,100,40,"SAVE TILES",saveTiles)
+     newButton(panel.x,panel.y,100,40,"SAVE TILES",saveTiles,nil,nil,red)
      newButton(panel.x,panel.y+40,100,40,"LOAD TILES",loadTiles)
-     newButton(panel.x+100,panel.y,100,40,"SAVE LEVELS",saveLevels)
+     newButton(panel.x+100,panel.y,100,40,"SAVE LEVELS",saveLevels,nil,nil,red)
      newButton(panel.x+100,panel.y+40,100,40,"LOAD LEVELS",loadLevels)
      newButton(panel.x,panel.y+80,100,40,"NEW LEVELS",newLevels)
      newButton(panel.x+100,panel.y+80,100,40,"ERASE LEVELS",eraseLevels)
+     newButton(panel.x,panel.y+120,100,40,"SHOW GRID",updateGrid)
 
     
      newButton(panel.x+250,panel.y,50,40,"DOWN",downLevels)
@@ -449,6 +453,9 @@ function saveLevels()
      end
    file:close() 
 end
+function updateGrid()
+     statusGrid = not statusGrid
+end
 
 function loadLevels()
 
@@ -489,7 +496,7 @@ function loadLevels()
    
    file:close()
 end
-function newButton(pX,pY,pW,pH,name,calback,img,index)
+function newButton(pX,pY,pW,pH,name,calback,img,index,color)
      local button = {}
      button.index = index
      button.x = pX
@@ -503,6 +510,11 @@ function newButton(pX,pY,pW,pH,name,calback,img,index)
      button.backGroundColor = {1,0,1,1}
      button.colorIsHover = {1,0,1,0.6}
      button.colorIsNotHover = {1,1,1,1}
+     if color ~= nil then 
+          button.color = color
+     else 
+          button.color = nil --{1,1,1,1}
+     end
      function button:update(pX,pY)
           if  (pX>self.x 
                and pX<(self.x+self.w)
@@ -533,6 +545,11 @@ function newButton(pX,pY,pW,pH,name,calback,img,index)
           love.graphics.setColor(0,0,1,1)
             
           if self.img == nil then
+               if self.color~= nil then 
+                    love.graphics.setColor(self.color)
+                    love.graphics.rectangle("fill",self.x,self.y,self.w,self.h)
+               end
+               love.graphics.setColor(0,0,1,1)
                love.graphics.rectangle("line",self.x,self.y,self.w,self.h)
                love.graphics.printf(self.name,self.x,self.y+self.h/3,self.w,"center")
                love.graphics.setColor(1,1,1,1)
@@ -544,7 +561,7 @@ function newButton(pX,pY,pW,pH,name,calback,img,index)
                local zoom = 0.8
                love.graphics.draw(self.img,self.x+self.w/2,self.y+self.h/2,0,sizeSprite*zoom,sizeSprite*zoom,w/2,h/2)
           end
-     
+          
      end
      table.insert(buttons,button)
 
@@ -610,9 +627,12 @@ function drawGrid(grid,x,y,v)
         end
     end
     if v~= nil then
+     if statusGrid then 
+
         love.graphics.setColor(1,0,0,1)
         love.graphics.print(v,x+20,y+20)
         love.graphics.setColor(1,1,1,1)
+     end
     end
 end
 function drawLevelEdit()
@@ -639,9 +659,11 @@ function drawLevelEdit()
     end
     for l=1,lineLevel do
         for c=1,rowsLevel do
+               if statusGrid then 
                 love.graphics.setColor(1,0,0,1)
                 love.graphics.rectangle("line",8*3*size*(c-1),10*3*size*(l-1),size*8*3,size*10*3)
                 love.graphics.setColor(1,1,1,1)
+               end
         end
     end
 end
@@ -699,7 +721,7 @@ function love.mousepressed( x, y, button)
     if x>0 and y>0 and x<(size*8*3*rowsLevel) and y<(size*10*3*lineLevel)then
         local c = math.floor(x/(size*8*3))+1
         local l = math.floor(y/(size*10*3))+1
-        if indexSprite>=1 and indexSprite<=2 then 
+        if indexSprite>=1 and indexSprite<=2  or indexSprite==13  then 
           -- sprite unique
           for i=1,#mapSprite[currentLevel] do
                local v= mapSprite[currentLevel][i]
@@ -710,7 +732,7 @@ function love.mousepressed( x, y, button)
           end
           mapSprite[currentLevel][(l-1)*rowsLevel+c] = indexSprite
         
-        elseif  indexSprite>=3 then
+        elseif  indexSprite>=3 and indexSprite~=13 then
               
                if button == 1 then 
                     mapSprite[currentLevel][(l-1)*rowsLevel+c] = indexSprite

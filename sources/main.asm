@@ -5,6 +5,7 @@
 ; gfx https://piiixl.itch.io/1-bit-in-motion
  
  processor 6803
+LevelStart equ 2
 std equ 1
 cart equ 2
 mode equ std
@@ -53,7 +54,7 @@ start
   staa ligneMap
   ldaa #$ff 
   staa oldKey 
-  ldaa #0 
+  ldaa #LevelStart-1 
   staa currentLevel
   ldaa #7
   staa colorR3
@@ -116,6 +117,7 @@ updateCurrentScene
    include "sources/updateKey.asm"
    include "sources/ghost.asm"
    include "sources/key.asm"
+   include "sources/automaticMove.asm"
 
    include "sources/levelManager/level.asm"
 
@@ -160,7 +162,7 @@ scoreBonus byte 0
 colorR3 byte 0
 colorPlayer byte 0
 colorPiege byte 0
-
+statusAutomaticMove byte 0
 hearderLevel equ 2+4 ; 2(NbLevel + size) 4 (NbLevel + size + posPerso + posDoor)
 width equ 12 ;12
 height equ 6
@@ -173,7 +175,8 @@ indexPiege byte 0
 indexGhost byte 0
 indexKey byte 0
 tempoGhost byte 0
-
+tempoAutomaticMove byte 0 
+speedAutomaticMove equ 30
 lstGhost ds 50,0
 lstPiege ds width*height*2,0
 lstKey ds 5*2 ,0
@@ -192,5 +195,5 @@ prgSize=end-start
  echo "X: ",XPadlock
  echo "Y ",Ypos 
  echo "currentmap ",currentMapSprite 
- echo "lstKey ",lstKey
+ echo "StatusMove ",statusAutomaticMove
  echo "datasprite ",endDataSprite-dataSprite

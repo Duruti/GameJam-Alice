@@ -387,7 +387,7 @@ endDataSprite
 
 ; 20 Levels
 map incbin "levels/level.bin"
-memoryMap ds 2348/2,0
+memoryMap ds 148,0
 
 idVide   equ 0
 idPerso  equ 1

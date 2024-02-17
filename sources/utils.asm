@@ -16,9 +16,9 @@ drawText
 drawTextloop
    ldaa 0,x
    beq endloop
-   std R1
+   staa R1
    ldaa #%0000000
-   std R2
+   staa R2
    ldaa #$34			;	attribut du caractère
    staa R3	
    
