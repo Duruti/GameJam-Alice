@@ -3,6 +3,8 @@ io.stdout:setvbuf('no')
 love.graphics.setDefaultFilter("nearest")
 
 
+
+
 local door = love.graphics.newImage("door.png")
 local perso = love.graphics.newImage("perso.png")
 local piege = love.graphics.newImage("piege.png")

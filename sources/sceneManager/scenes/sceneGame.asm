@@ -354,12 +354,13 @@ isWin
    jsr getIdSprite 
    cmpa #2
    bne endIsWin 
-   
    ldaa currentLevel
    inca 
-   anda #%11
+   cmpa #MaxLevel-1
+   ble  nextIsWin
+   clra 
+nextIsWin
    staa currentLevel
-
    ldab #sceneNextLevel
    jsr changeScene
 endIsWin

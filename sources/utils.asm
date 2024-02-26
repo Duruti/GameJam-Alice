@@ -33,7 +33,7 @@ tempo
    inca
    staa tempoText
 
-;    inc tempoText
+ ;    inc tempoText
    cmpa #1
    bne tempo 
    clra 

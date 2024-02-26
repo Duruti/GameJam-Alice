@@ -5,7 +5,8 @@
 ; gfx https://piiixl.itch.io/1-bit-in-motion
  
  processor 6803
-LevelStart equ 2
+LevelStart equ 1
+MaxLevel equ 16
 std equ 1
 cart equ 2
 mode equ std
