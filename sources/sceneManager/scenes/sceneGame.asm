@@ -50,14 +50,14 @@ initGame
    ldx #textBonus
    ldd #$111D
    jsr drawText
-   jsr drawScoreBonus
 
    clra 
    staa tempoGhost
    jsr drawGhosts
+   
+   jsr drawScoreBonus
 
    rts 
-
 updateGame
 
    jsr vbl
@@ -386,14 +386,14 @@ exitGame
    jsr changeScene
    rts
 drawScoreBonus
-   ldd $1616
+   ldd #$1617
    std $3280
    ldab scoreBonus
    clra 
-   ;adda #$30
-   ;jsr $F9C6
+
    jsr $F419
    rts
+
 textGame byte "SCENE GAME",0
 textBonus byte "BONUS",0
 vide 

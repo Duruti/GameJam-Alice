@@ -5,11 +5,12 @@
 ; gfx https://piiixl.itch.io/1-bit-in-motion
  
  processor 6803
-LevelStart equ 1
-MaxLevel equ 16
+LevelStart equ 20
+MaxLevel equ 26
 std equ 1
 cart equ 2
 mode equ std
+
  if mode=std
   echo "std"
   org $3346
@@ -24,12 +25,14 @@ mode equ std
 start
   
  
-   clr $00E8
+
    include "sources/constante.asm"
    ldaa #$01
    staa TECRA 
    clra
    jsr INASS
+
+
 
   ; CONFIGURE LA Vsync
    ldaa #%10000001 ; veux ecrire dans le TGS via R1 
@@ -67,6 +70,10 @@ start
 
    ldaa #80 ; efface l'écran
    jsr $FBD6
+
+   
+
+
 
    if mode=cart 
     ; copie dans la ram la gameloop pour automodification
@@ -121,6 +128,8 @@ updateCurrentScene
    include "sources/automaticMove.asm"
 
    include "sources/levelManager/level.asm"
+
+endCode
 
  if mode=cart 
  org $4000
@@ -188,7 +197,7 @@ endVariable
 
 end 
 
-prgSize=end-start
+prgSize=endCode-start
  echo "start: ",start
  echo "end: ",end
 
