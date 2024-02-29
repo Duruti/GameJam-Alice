@@ -1,5 +1,16 @@
 updateKey
+ if DEBUG==1
 
+O
+   ldaa oldKey 
+   anda #%10000000
+   bne actionDownLevel
+P
+   ldaa oldKey 
+   anda #%1000000
+   bne actionUpLevel
+ endif
+Break
    ;Break
    ldaa oldKey 
    anda #%100000
@@ -15,17 +26,17 @@ Q
    ;gauche : Q
    ldaa oldKey 
    anda #%1000
-   bne actionQ
+   bne actionQ1
  
 S   ;bas : S 
    ldaa oldKey 
    anda #%100
-   bne actionS
+   bne actionS1
  
 D   ;droite : D
    ldaa oldKey 
    anda #%10
-   bne actionD
+   bne actionD1
 Fire 
    ;Fire : Espace
    ldaa oldKey 
@@ -33,8 +44,45 @@ Fire
    bne actionFire1
 endActionKey 
    rts
+;**  Redirection
+actionD1 jmp actionD
+actionS1 jmp actionS
+actionQ1 jmp actionQ
 
 ;*************** Action *****************
+ if DEBUG==1
+
+actionDownLevel
+   ldaa newKey 
+   anda #%10000000
+   bne P
+   ; ...
+   ldaa currentLevel
+   cmpa #1
+   beq endActionDownLevel
+   deca 
+   staa currentLevel
+   ldaa newKey
+   staa oldKey
+   jsr initGame
+endActionDownLevel
+   jmp endAction
+actionUpLevel
+   ldaa newKey 
+   anda #%1000000
+   bne Break
+   ; ...
+   ldaa currentLevel
+   cmpa #MaxLevel
+   beq endActionUpLevel
+   inca 
+   staa currentLevel
+   ldaa newKey
+   staa oldKey
+   jsr initGame
+endActionUpLevel
+   jmp endAction
+ endif 
 actionBreak
    ldaa newKey 
    anda #%100000
@@ -61,11 +109,13 @@ SuiteActionZ
    jsr drawPlayer
    jmp endAction
 actionFire1 jmp actionFire
-
+Fire1 jmp Fire
+D1 jmp D 
+S1 jmp S
 actionQ 
    ldaa newKey 
    anda #%1000
-   bne S
+   bne S1
    jmp isLeft
 SuiteActionQ 
  
@@ -80,7 +130,7 @@ SuiteActionQ
 actionS 
    ldaa newKey 
    anda #%100
-   bne D 
+   bne D1 
  
    jmp isDown
 SuiteActionS 
@@ -98,7 +148,7 @@ SuiteActionS
 actionD 
    ldaa newKey 
    anda #%10
-   bne Fire
+   bne Fire1
    jmp isRight
 SuiteActionD 
 

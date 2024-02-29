@@ -51,12 +51,20 @@ initGame
    ldd #$111D
    jsr drawText
 
+   ldx #textLevel
+   ldd #$021D
+   jsr drawText
+
    clra 
    staa tempoGhost
    jsr drawGhosts
    
    jsr drawScoreBonus
-
+   jsr drawCurrentLevel
+ if DEBUG=1 
+ ;  ldaa #%11111111
+ ;  staa oldKey
+ endif
    rts 
 updateGame
 
@@ -393,9 +401,18 @@ drawScoreBonus
 
    jsr $F419
    rts
+drawCurrentLevel
+   ldd #$1608
+   std $3280
+   ldab currentLevel
+   clra 
+
+   jsr $F419
+   rts
 
 textGame byte "SCENE GAME",0
 textBonus byte "BONUS",0
+textLevel byte "LEVEL",0
 vide 
    byte $FF,$FF,$FF,$FF
    byte $FF,$FF,$FF,$FF

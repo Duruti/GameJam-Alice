@@ -7,6 +7,7 @@
  processor 6803
 LevelStart equ 20
 MaxLevel equ 26
+DEBUG equ 0
 std equ 1
 cart equ 2
 mode equ std

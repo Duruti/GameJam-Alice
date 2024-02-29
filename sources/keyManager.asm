@@ -1,7 +1,7 @@
 
 
-; bit    5    4 3 2 1 0
-;      Break  Z Q S D Espace
+; bit    7  6    5    4 3 2 1 0
+;        O  P   Break  Z Q S D Espace
 
 
 getKey
@@ -9,6 +9,28 @@ getKey
    clra 
    staa newKey
 
+   ; O 
+   ldaa #$7F ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
+   staa PORT1
+   ldaa IO ; on récupere les infos dans IO
+   anda #%10 ; %01000000 ; on test le bit 1 , si il vaut 0 alors 
+   bne testP ; test suivant
+   ldaa #%10000000
+   oraa newKey
+   staa newKey
+
+testP
+   ; P 
+   ldaa #$FE ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
+   staa PORT1
+   ldaa IO ; on récupere les infos dans IO
+   anda #%100 ; %01000000 ; on test le bit 1 , si il vaut 0 alors 
+   bne testBreak ; test suivant
+   ldaa #%1000000
+   oraa newKey
+   staa newKey
+
+testBreak
    ; Break 
    ldaa #$FB ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
    staa PORT1
