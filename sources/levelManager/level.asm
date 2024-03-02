@@ -360,34 +360,6 @@ drawSpriteMap
    
 
 
-dataSprite 
-
-spriteSheet incbin "sprites/spriteSheet.bin"
-sprite incbin "sprites/perso.bin"
-door incbin "sprites/door.bin"
-piege incbin "sprites/piege.bin"
-decor1 incbin "sprites/decor1.bin"
-decor2 incbin "sprites/decor2.bin"
-bonus incbin "sprites/bonus.bin"
-torche incbin "sprites/torche.bin"
-ghostleft incbin "sprites/ghostleft.bin"
-ghostright incbin "sprites/ghostright.bin"
-ghostup incbin "sprites/ghostup.bin"
-ghostdown incbin "sprites/ghostdown.bin"
-key incbin "sprites/key.bin"
-padlock incbin "sprites/cadenas.bin"
-moveup incbin "sprites/moveup.bin"
-moveright incbin "sprites/moveright.bin"
-movedown incbin "sprites/movedown.bin"
-moveleft incbin "sprites/moveleft.bin"
-
-
-cells incbin "levels/tiles.bin"
-endDataSprite
-
-; 20 Levels
-map incbin "levels/level.bin"
-memoryMap ds 148,0
 
 idVide   equ 0
 idPerso  equ 1
@@ -408,5 +380,4 @@ idMoveRight equ 15
 idMoveDown equ 16
 idMoveLeft equ 17
 
-colorSprite byte 0,2,%00000110,1,2,%00000111,5,3,1,1,1,1,3,5,7,7,7,7
 

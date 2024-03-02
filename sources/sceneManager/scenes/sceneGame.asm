@@ -26,20 +26,7 @@ initGame
    
   jsr drawMap
    
-      
-   ; ldx adrCurrentLevel; #map+hearderLevel-4
-   ; ;-4
-   ; dex
-   ; dex
-   ; dex 
-   ; dex 
-
-   ; ldaa 0,x
-   ; deca
-   ; staa Xpos
-   ; ldab 1,x
-   ; decb
-   ; stab Ypos 
+  
    jsr schearchPerso
    jsr drawMapSprite
    ldaa Xpos
@@ -61,10 +48,7 @@ initGame
    
    jsr drawScoreBonus
    jsr drawCurrentLevel
- if DEBUG=1 
- ;  ldaa #%11111111
- ;  staa oldKey
- endif
+
    rts 
 updateGame
 
@@ -92,7 +76,7 @@ suiteUpdateGame
    jsr isGameover
    jsr isWin 
 
-   
+
    rts 
 jmpMovePlayerAutomatic
    jmp MovePlayerAutomatic

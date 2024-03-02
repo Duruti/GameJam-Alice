@@ -5,27 +5,95 @@
 ; gfx https://piiixl.itch.io/1-bit-in-motion
  
  processor 6803
-LevelStart equ 20
+LevelStart equ 15
 MaxLevel equ 26
-DEBUG equ 0
+DEBUG equ 1
 std equ 1
 cart equ 2
-mode equ std
+mode equ cart
 
  if mode=std
   echo "std"
   org $3346
 ; header basic
+start
  BYTE $33, $52, $00, $0a, $9f, $20, $31, $33, $31, $34, $32, $00, $00, $00, $00, $00
-
  else 
   echo "cart"
   org $1000 
+start
+ ; code pour transferer le code qui transfera le code 
+
+   ldd #endCopyCode-startCopyCode + codeTransfert ; fin de la zone a copié
+   std adressFinCopy
+   ldx #codeTransfert ; source 
+   ldd #$3400 ; destination 
+   std adressTamponCopy ; tampon 
+loopCopy
+  ldaa 0,x    ; recupere l'octet
+  pshx        ; sauve X 
+  ldx adressTamponCopy ; recupere la destination dans x 
+  staa 0,x    ; copy l'octet
+  inx         ; incremente x 
+  stx adressTamponCopy ; resauvegarde dans l'adressTampon
+  pulx        ; restaure X 
+  inx         ; increment x
+  cpx adressFinCopy ; regarde si on arrive à la fin de la data a copier
+  bne loopCopy
+  
+  jmp $3400
+
+codeTransfert   
+ rorg $3400
+startCopyCode
+
+ ; code pour transferer 1 ere Bank en RAM
+  ldd #$2FFF+1 ; fin de la zone a copié
+  std adressFinCopy
+  ldx #startCodeCart ; source 
+  ldd #$3500 ; destination 
+  std adressTamponCopy ; tampon 
+  jsr copyData
+
+
+ ; code pour transferer la 2 eme Bank en RAM
+  ldaa #1 ; choix bank 2
+  staa $1000
+ 
+  ldd #$2FFF+1 ; fin de la zone a copié
+  std adressFinCopy
+  ldx #$1000 ; source 
+;  ldd #$3400 ; destination 
+;  std adressTamponCopy ; tampon 
+  jsr copyData
+
+  jmp $3500
+
+
+copyData
+
+  ldaa 0,x    ; recupere l'octet
+  pshx        ; sauve X 
+  ldx adressTamponCopy ; recupere la destination dans x 
+  staa 0,x    ; copy l'octet
+  inx         ; incremente x 
+  stx adressTamponCopy ; resauvegarde dans l'adressTampon
+  pulx        ; restaure X 
+  inx         ; increment x
+  cpx adressFinCopy ; regarde si on arrive à la fin de la data a copier
+  bne copyData
+  rts
+endCopyCode 
+ rend
+
+startCodeCart
+
+ rorg $3500
+
  endif
 
-start
   
- 
+
 
    include "sources/constante.asm"
    ldaa #$01
@@ -51,6 +119,7 @@ start
   ldaa #-3
   staa colonneMap
   ldaa #2
+  staa currentScene ; place en dehors de game et Menu pour pouvoir la changer
   staa nbLine
   ldaa #4-1
   staa nbByte 
@@ -75,10 +144,9 @@ start
    
 
 
-
    if mode=cart 
     ; copie dans la ram la gameloop pour automodification
-    ldx #$4000
+    ldx #$3350
     ldaa #$bd ; jsr update
     staa 0,x 
     staa 1,x 
@@ -86,9 +154,9 @@ start
     
     ldaa #$7e ;jmp loop
     staa 3,x 
-    ldaa #$40
+    ldaa #$33
     staa 4,x 
-    ldaa #$00
+    ldaa #$50
     staa 5,x 
 
     ldaa #$bd ; jsr init
@@ -108,10 +176,15 @@ updateCurrentScene
    jmp updateCurrentScene
  else 
 
-   jmp $3700  
+   jmp $3350  
  endif
 
 
+
+; ****  DATA SPRITE *****
+dataSprite 
+ include "sources/dataGFX.asm"
+endDataSprite
 
 
    include "sources/sceneManager/sceneManager.asm"
@@ -130,17 +203,11 @@ updateCurrentScene
 
    include "sources/levelManager/level.asm"
 
+
+
 endCode
 
- if mode=cart 
- org $4000
-updateCurrentScene 
-   jsr updateGame ; automodifié
-   jmp updateCurrentScene
-
-initCurrentScene jsr initGame ; automodifié
-   rts 
- endif
+; **** DATA VARIABLES ****
 
 startVariable 
 
@@ -194,17 +261,43 @@ lstKey ds 5*2 ,0
 
 endVariable 
 
+; **** DATA LEVELS  *****
+dataLevel
+ include "sources/dataLevels.asm"
+endDataLevel
 
-
+ rorg $3346
+adressTamponCopy word 0 
+adressFinCopy word 0
+ rend 
 end 
+ if mode=cart 
+ rorg $3350 ;+(endCode-start)+$100
+updateCurrentScene 
+   jsr updateGame ; automodifié
+   jmp updateCurrentScene
 
-prgSize=endCode-start
+initCurrentScene jsr initGame ; automodifié
+   rts 
+ endif
+ rend
+
  echo "start: ",start
  echo "end: ",end
 
- echo "size :",prgSize 
- echo "X: ",XPadlock
- echo "Y ",Ypos 
- echo "currentmap ",currentMapSprite 
- echo "StatusMove ",statusAutomaticMove
- echo "datasprite ",endDataSprite-dataSprite
+sizeCode = endCode-start 
+sizeSprite = endDataSprite-dataSprite
+sizeLevel = endDataLevel-dataLevel
+sizeVariable = endVariable-startVariable
+
+ echo "size Code ",sizeCode
+ echo "size datasprite ",sizeSprite
+ echo "size dataLevel ",sizeLevel
+ echo "size Variable ",sizeVariable
+ echo "size DATA ",sizeLevel + sizeSprite + sizeVariable
+ echo "Total Size ",sizeCode + sizeLevel + sizeSprite + sizeVariable
+ echo "***** DEBUG INFO  ***** "
+  echo "rorg : ",dataSprite
+;  echo "Y ",Ypos 
+;  echo "currentmap ",currentMapSprite 
+;  echo "StatusMove ",statusAutomaticMove
