@@ -49,10 +49,13 @@ initGame
    jsr drawScoreBonus
    jsr drawCurrentLevel
 
+   ldaa $74
+   staa idSpritePerso
    rts 
 updateGame
 
-   jsr vbl
+   ; jsr vbl
+   jsr AnimSprite
    ldaa statusAutomaticMove
    bne jmpMovePlayerAutomatic
    jsr getKey
@@ -69,7 +72,7 @@ suiteUpdateGame
    jsr isTorche
    jsr isKey
    jsr updateGhost
-
+endUpdateGame
    ldaa newKey
    staa oldKey
  
@@ -322,6 +325,8 @@ isTorche
    bne endIsTorche 
    ldaa #1
    staa isStart
+   clra 
+   staa indexTorch
    jsr drawTrap
    jsr eraseSprite
 endIsTorche
@@ -393,6 +398,143 @@ drawCurrentLevel
 
    jsr $F419
    rts
+
+; *******  ANIM SPRITE *******
+AnimSprite
+   ldaa isAnim
+   beq endAnimSprite
+
+   ldaa timerAnimation
+   anda 7 
+   bne endAnimSprite
+  
+   ldaa indexAnim
+   inca
+   anda #1
+   staa indexAnim
+
+   jsr animTorch
+   jsr animAutomaticMove
+   jsr animPerso
+
+endAnimSprite   
+   clra 
+   staa isAnim
+   rts 
+
+animPerso
+   ldx #tableAnimPerso
+   ldab indexAnim
+   abx 
+   ldaa 0,x
+   staa idSpritePerso
+   jsr drawPlayer
+   rts 
+
+animTorch
+   ldaa indexTorch
+   beq endAnimTorch
+
+   ldx #tableAnimTorch
+   ldab indexAnim
+   abx 
+   ldaa 0,x
+   staa idSpriteTorch
+   clrb
+loopAnimTorch   
+   pshb 
+   ; trouver la position
+   ldx #lstTorch 
+   abx 
+   ldaa 0,x 
+   staa tamponX
+   ldaa 1,x 
+   staa tamponY
+   ; change la couleur
+   ldaa #3 ;colorPiege+idPiege
+   staa colorR3
+   ; dessiner le sprite
+   ldaa idSpriteTorch
+   ldab #$81
+   jsr drawSprite3230
+   pulb 
+   incb 
+   cmpb indexTorch
+   bne loopAnimTorch
+
+endAnimTorch
+   rts 
+
+animAutomaticMove
+   ldaa indexAutomaticMove
+   beq endAnimAutomaticMove
+
+   
+   clrb
+loopAnimAutomaticMove   
+   pshb 
+   ; trouver la position
+   ldaa #3 
+   mul 
+   ldx #lstAutomaticMove 
+   abx 
+
+ ;  ldaa 1,x 
+ ;  staa tamponX
+ ;  ldaa 2,x 
+ ;  staa tamponY
+   jsr getIdAutomaticMove
+   
+   ; change la couleur
+
+
+   ldx memoryTampon
+   
+   ldaa idSpriteAutomaticMove
+   adda #11
+ ;  ldaa #$19
+   ldab #$c0 ; a=R4 et b = R5
+   ;std memoryTampon
+   std memoryTampon
+   jsr loadDataSprite
+
+
+   pulb 
+   incb
+   inx
+   inx 
+   inx  
+   cmpb indexAutomaticMove
+   bne loopAnimAutomaticMove
+
+endAnimAutomaticMove
+   rts 
+getIdAutomaticMove 
+
+   ldab 0,x ; recupere l'id 
+  ; ldab #idMoveUp
+   stab idSpriteAutomaticMove
+
+   subb #idMoveUp ; décalle pour commencer a 0 
+   lslb ; multiplie par 4 
+   lslb 
+;   clrb
+   addb indexAnim
+   addb indexAnim
+
+
+
+   ldx #tableAnimMoveUp
+   abx 
+   ldd 0,x
+   std memoryTampon
+
+
+
+  ; staa idSpriteAutomaticMove
+  ; clrb
+   rts 
+
 
 textGame byte "SCENE GAME",0
 textBonus byte "BONUS",0

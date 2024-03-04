@@ -226,53 +226,7 @@ drawPlayer
    jsr getPosition
    ldaa colorPlayer 
    staa colorR3
-   ldd #$3081 ; a=R1 b=R2
+   ldaa idSpritePerso
+   ldab #$81 ; a=R1 b=R2
    jsr drawSprite3230
    rts
-
-; drawPlayer2 
-   
-;    ; efface l'ancienne position 
-;    ldaa #$20
-;    staa R1
-;    ldaa #%0000000
-;    staa R2
-;    LDAA #color			;	attribut du caractère
-;    STAA R3	
-;    LDAA oldPosY			;	ligne
-;    STAA R6
-;    LDAA oldPosX			;	colonne
-;    STAA R7
-
-;    ldaa #$00			;	commande  KRF affichage en 40 carateres
-;    staa R0+EXEC
-
-;    jsr busy 
-   
-;    ; affiche le sprite 
-
-;    ldaa #$51
-;    staa R1
-;    ldaa #%0000000
-;    staa R2
-;    LDAA #$34			;	attribut du caractère
-;    STAA R3	
-;    LDAA posY			;	ligne
-;    STAA R6
-;    LDAA posX			;	colonne
-;    STAA R7
-
-;    ldaa #$00			;	commande  KRF affichage en 40 carateres
-;    staa R0+EXEC
-
-;    jsr busy 
-
-;    ldaa posX
-;    staa oldPosX
-;    ldaa posY
-;    staa oldPosY
-
-;    rts
-
-
-

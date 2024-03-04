@@ -4,24 +4,39 @@ initLevel
    jsr loadCurrentMapSprite
    jsr getTrap
    jsr getGhost
+   jsr getTorch
+   jsr getAutomaticMove
    jsr getKeyAndPadlock
 
    ; Charge les graphismes dans l'EF9345
+
+   ; choisi le bloc 3
+
+   ; ldaa #%10000011 ; PAT
+   ; staa R0 
+   ; ldaa #$67
+   ; staa R1+EXEC 
+   ; jsr BUSY
+
+   ; ldaa #%10000100 ; DOR 
+   ; staa R0 
+   ; ldaa #$13 
+   ; staa R1+EXEC 
+   ; jsr BUSY
 
    ldd #$09c0 ; a=R4 et b = R5
    ;std startLoop+1
    std memoryTampon
    ldx #spriteSheet+2
    jsr loadDataSprite
+   
    ldd #$0Ac0 ; a=R4 et b = R5
-  ; std startLoop+1
    std memoryTampon
    ldx #spriteSheet+2+40 
    jsr loadDataSprite
    
    ldd #$0Bc0 ; a=R4 et b = R5
    std memoryTampon
-   ;std startLoop+1
    ldx #spriteSheet+2+80
    jsr loadDataSprite
    
@@ -30,6 +45,8 @@ initLevel
    ;std startLoop+1
    ldx #sprite+2
    jsr loadDataSprite
+
+ 
 
    ldd #$0Dc0 ; a=R4 et b = R5
    std memoryTampon
@@ -114,12 +131,30 @@ initLevel
    ldx #moveleft+2
    jsr loadDataSprite
 
+   ldd #$1Dc0 ; a=R4 et b = R5
+   std memoryTampon
+   ;std startLoop+1
+   ldx #sprite2+2
+   jsr loadDataSprite
+
+   ldd #$1Ec0 ; a=R4 et b = R5
+   std memoryTampon
+   ;std startLoop+1
+   ldx #torche2+2
+   jsr loadDataSprite
+
+   ldd #$1Fc0 ; a=R4 et b = R5
+   std memoryTampon
+   ;std startLoop+1
+   ldx #moveup2+2
+   jsr loadDataSprite
 
    ldd #$00c0 ; a=R4 et b = R5
    std memoryTampon
    ldx #vide
    jsr loadDataSprite
 
+   ; ecrit dans la bank 
 
    rts
 calcAdrCurrentLevel
@@ -170,6 +205,101 @@ foundPerso
    staa Xpos
 endSchearchPerso 
    rts
+; **** RECHERCHE TAPIS ROULANT ****
+getAutomaticMove
+   ; parcours la map à la recherche de pièges 
+   clra 
+   staa indexAutomaticMove
+   ldx #lstAutomaticMove
+   stx adrTampon
+   ldx #currentMapSprite
+   clrb
+loopGetAutomaticMove
+   ldaa 0,x
+
+   cmpa #idMoveDown
+   beq addAutomaticMove
+   cmpa #idMoveLeft
+   beq addAutomaticMove
+   cmpa #idMoveRight
+   beq addAutomaticMove
+   cmpa #idMoveUp
+   beq addAutomaticMove
+
+
+suiteGetAutomaticMove
+   inx 
+   incb
+   cmpb #width*height
+   bne loopGetAutomaticMove
+   rts
+
+addAutomaticMove
+   pshx
+   staa idSpriteAutomaticMove ; sauve le type 
+
+   jsr calcPositionTrap
+  
+   ; 3 octet
+   ; 1 = id 
+   ; 2 = X 
+   ; 3 = Y 
+
+   ldx adrTampon
+   ldaa idSpriteAutomaticMove
+   staa 0,x 
+   inx 
+   ldaa tamponX
+   staa 0,x 
+   inx 
+   ldaa tamponY
+   staa 0,x 
+   inx
+   stx adrTampon
+
+   inc indexAutomaticMove
+   pulx
+   jmp suiteGetAutomaticMove
+
+
+; **** RECHERCHE TORCHE ****
+getTorch
+
+   ; parcours la map à la recherche de pièges 
+   clra 
+   staa indexTorch
+   ldx #lstTorch
+   stx adrTampon
+   ldx #currentMapSprite
+   clrb
+loopGetTorch
+   ldaa 0,x
+   cmpa #idTorche
+   beq addTorch
+suiteLGTorch
+   inx 
+   incb
+   cmpb #width*height
+   bne loopGetTorch
+   rts
+
+addTorch
+   pshx
+   jsr calcPositionTrap
+  
+   ldx adrTampon
+   ldaa tamponX
+   staa 0,x 
+   inx 
+   ldaa tamponY
+   staa 0,x 
+   inx
+   stx adrTampon
+
+   inc indexTorch
+   pulx
+   jmp suiteLGTorch
+
 ; recherche les pièges
 
 getTrap

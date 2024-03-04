@@ -5,9 +5,11 @@
 ; gfx https://piiixl.itch.io/1-bit-in-motion
  
  processor 6803
-LevelStart equ 15
+
+LevelStart equ 10
 MaxLevel equ 26
 DEBUG equ 1
+sceneStart = sceneGame
 std equ 1
 cart equ 2
 mode equ cart
@@ -63,8 +65,8 @@ startCopyCode
   ldd #$2FFF+1 ; fin de la zone a copié
   std adressFinCopy
   ldx #$1000 ; source 
-;  ldd #$3400 ; destination 
-;  std adressTamponCopy ; tampon 
+ ;  ldd #$3400 ; destination 
+ ;  std adressTamponCopy ; tampon 
   jsr copyData
 
   jmp $3500
@@ -96,23 +98,45 @@ startCodeCart
 
 
    include "sources/constante.asm"
+ 
+   
    ldaa #$01
    staa TECRA 
    clra
    jsr INASS
 
 
+  ldaa #80 ; efface l'écran
+  jsr $FBD6
+
+    ; charge la longueur de la musique
+  ldx #music
+  ldaa 0,x 
+  staa lenghtMusic
+
+  ; charge la premier note 
+  ldaa #4
+  staa duree
+  ldx #music+1 
+  ldd 0,x
+  std note 
+
+  ldaa #0
+  staa stateMusic
+
+ ; jsr initInterruption ; initialise les interruptions
+
 
   ; CONFIGURE LA Vsync
-   ldaa #%10000001 ; veux ecrire dans le TGS via R1 
-   staa R0
-   ldaa #%10000 ; passe TGS4 à 1 
-   staa R1+EXEC 
-   jsr busy 
+  ;  ldaa #%10000001 ; veux ecrire dans le TGS via R1 
+  ;  staa R0
+  ;  ldaa #%10000 ; passe TGS4 à 1 
+  ;  staa R1+EXEC 
+  ;  jsr busy 
 
-   ldaa #%10010101 ; passe en VRM pour se synchroniser sur 
-   staa R0+EXEC 
-   jsr busy
+  ;  ldaa #%10010101 ; passe en VRM pour se synchroniser sur 
+  ;  staa R0+EXEC 
+  ;  jsr busy
 
 
    ; copie variable
@@ -138,11 +162,7 @@ startCodeCart
   staa scoreBonus
 
 
-   ldaa #80 ; efface l'écran
-   jsr $FBD6
-
-   
-
+ 
 
    if mode=cart 
     ; copie dans la ram la gameloop pour automodification
@@ -166,7 +186,7 @@ startCodeCart
     ldaa #$39 ; rts
     staa 9,x 
    endif
-   ldab #sceneGame
+   ldab #sceneStart
    jsr changeScene
    ; jsr initGame
  if mode=std
@@ -187,6 +207,7 @@ dataSprite
 endDataSprite
 
 
+   include "sources/interrup.asm"
    include "sources/sceneManager/sceneManager.asm"
    include "sources/sceneManager/scenes/sceneGame.asm"
    include "sources/sceneManager/scenes/sceneGameOver.asm"
@@ -200,7 +221,6 @@ endDataSprite
    include "sources/ghost.asm"
    include "sources/key.asm"
    include "sources/automaticMove.asm"
-
    include "sources/levelManager/level.asm"
 
 
@@ -211,6 +231,20 @@ endCode
 
 startVariable 
 
+; music
+
+duree byte $80
+compteur byte 0
+impuls byte 0
+note word do
+oldNote word 0
+isPlayingSilence byte 0
+isOff byte 0
+indexMusic byte 0 
+lenghtMusic byte 0
+stateMusic byte 0
+
+timerAnimation byte 0
 currentScene byte sceneMenu
 nbLine byte 2
 nbByte byte 4-1
@@ -259,12 +293,41 @@ lstGhost ds 50,0
 lstPiege ds width*height*2,0
 lstKey ds 5*2 ,0
 
+
+tableAnimPerso byte $30,$74
+tableAnimTorch byte $48,$78
+
+ align 16
+tableAnimMoveUp word moveup+2,moveup2+2;   $64,$7C ; ordre IMPORTANT
+tableAnimMoveRight word moveright+2,moveright2+2; $68,$28
+tableAnimMoveDown word movedown+2,movedown2+2;  $6c,$2c
+tableAnimMoveLeft word moveleft+2,moveleft2+2;  byte $70,$70
+
+isAnim byte 0
+indexAnim byte 0
+idSpritePerso byte 0
+idSpriteTorch byte 0
+idSpriteAutomaticMove byte 0
+
+
+indexTorch byte 0
+lstTorch ds 10,0
+indexAutomaticMove byte 0
+lstAutomaticMove ds 60,0
+
+
 endVariable 
 
 ; **** DATA LEVELS  *****
 dataLevel
  include "sources/dataLevels.asm"
 endDataLevel
+
+; ***** DATA MUSIC ******
+dataMusic
+ align 256 
+music  incbin "sources/music.bin"
+endDataMusic
 
  rorg $3346
 adressTamponCopy word 0 
@@ -297,7 +360,7 @@ sizeVariable = endVariable-startVariable
  echo "size DATA ",sizeLevel + sizeSprite + sizeVariable
  echo "Total Size ",sizeCode + sizeLevel + sizeSprite + sizeVariable
  echo "***** DEBUG INFO  ***** "
-  echo "rorg : ",dataSprite
+  echo "rorg : ",indexAutomaticMove
 ;  echo "Y ",Ypos 
 ;  echo "currentmap ",currentMapSprite 
 ;  echo "StatusMove ",statusAutomaticMove

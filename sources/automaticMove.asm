@@ -21,16 +21,21 @@ MoveTrue
 
    ; stocke dans le status la direction avec l'Id de la tuile
    staa statusAutomaticMove
+   clra  ; reset le tempo 
+   staa tempoAutomaticMove
    rts 
 
 MovePlayerAutomatic
-
+ ;  ldaa timerAnimation
+ ;  bne EndMovePlayerAutomatic
    ldab tempoAutomaticMove
-   cmpb #speedAutomaticMove
+   ;andb #15 
+   
+   cmpb #8; speedAutomaticMove
    bne EndMovePlayerAutomatic
 
-   clrb  ; reset le tempo 
-   staa tempoAutomaticMove
+ ;  clrb  ; reset le tempo 
+ ;  stab tempoAutomaticMove
 
    ; gere le déplacement automatique du player
    ; a contient la direction 
@@ -45,8 +50,8 @@ MovePlayerAutomatic
    beq MovePlayerAutomaticLeft
 
 EndMovePlayerAutomatic
-   inc tempoAutomaticMove   
-   jmp escapeKey ; pas necessaire 
+   ;inc tempoAutomaticMove   
+   jmp endUpdateGame;escapeKey ; pas necessaire 
 
 
 MovePlayerAutomaticUp
