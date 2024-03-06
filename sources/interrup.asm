@@ -45,7 +45,7 @@ TOFInterrupt
    ldaa $09
    ;
    inc tempoAutomaticMove
-
+   inc tempoGhost
    ; gere le timer Animation
    inc timerAnimation
    ldaa #1

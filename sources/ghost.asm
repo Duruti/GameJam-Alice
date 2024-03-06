@@ -89,19 +89,21 @@ updateGhost
    ldaa indexGhost
    beq endUpdateGhost1
    ; gere la temporisation 
+   
+   
    ldaa tempoGhost
-   cmpa #50
-   beq moveGhost
+   anda 15 
+   bne endUpdateGhost1
    inc tempoGhost
-   jmp endUpdateGhost
-
+   jmp moveGhost
+  
 endUpdateGhost1
    rts 
 moveGhost
    ; init tempo
 
-   clra 
-   staa tempoGhost
+;   clra 
+;   staa tempoGhost
    clrb ; compteur liste
    ldx #lstGhost
 
