@@ -12,7 +12,7 @@ DEBUG equ 1
 sceneStart = sceneGame
 std equ 1
 cart equ 2
-mode equ cart
+mode equ std   ; ici on choisi le type d'export
 
  if mode=std
   echo "std"
@@ -124,7 +124,7 @@ startCodeCart
   ldaa #0
   staa stateMusic
 
- ; jsr initInterruption ; initialise les interruptions
+  jsr initInterruption ; initialise les interruptions
 
 
   ; CONFIGURE LA Vsync
@@ -213,6 +213,7 @@ endDataSprite
    include "sources/sceneManager/scenes/sceneGameOver.asm"
    include "sources/sceneManager/scenes/sceneMenu.asm"
    include "sources/sceneManager/scenes/sceneNextLevel.asm"
+   include "sources/sceneManager/scenes/sceneSelectLevel.asm"
    include "sources/utils.asm"
    include "sources/sprite.asm"
    include "sources/math.asm"

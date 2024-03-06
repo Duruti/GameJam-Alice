@@ -1,14 +1,14 @@
 -- Cette ligne permet d'afficher des traces dans la console pendant l'éxécution
 io.stdout:setvbuf('no')
 
-name = "larcinLazer"
+name = "cpc"
 local img = love.graphics.newImage(name..".png")
 local data = love.image.newImageData(name..".png")
- size = 3
+size = 3
 
 function love.load()
     love.graphics.setBackgroundColor(0,0,1,1)
-    
+
     width = 8 -- size width caracter    data:getWidth()
     height = 10 -- size height caracter   data:getHeight()
     nbLine = data:getHeight()/10
@@ -18,7 +18,7 @@ function love.load()
     results = {}
     for n=1,data:getHeight()/10 do
         for i=1,data:getWidth()/8 do
-      --      print(n,i)
+            --      print(n,i)
             local grid = getCaracter(n-1,i-1)
             local result = encodeByte(grid)
             table.insert(results,result)
@@ -38,7 +38,7 @@ function love.load()
     end
     interlaceData(dataSprite)
     writeFile(name..".bin",dataSprite)
-  --  love.event.quit()
+    --  love.event.quit()
 end
 function interlaceData(pData)
     print"interlace"
@@ -48,7 +48,7 @@ function interlaceData(pData)
             local v=pData[n][l]
         end
     end
-    
+
     return result
 end
 
@@ -88,37 +88,41 @@ end
 function love.draw()
     x=200
     y=100
-   
+
     love.graphics.draw(img)
-    
+
     local index = 1   
     local x,y = 100,100
     for n=1,data:getHeight()/10 do
         for i=1,data:getWidth()/8 do
             drawCaracter(results[index],x+i*8*size,y+n*10*size)
+            love.graphics.setColor(1,0,0,0.5)
+            love.graphics.rectangle("line",x+i*8*size,y+n*10*size,8*size,10*size)
+            love.graphics.setColor(1,1,1,1)
+
             index = index + 1
         end
     end
 
-    
+
 --    drawCaracter(result)
 
 
 
 end
 function drawCaracter(pTable,x,y)
-  for l=1,height do
+    for l=1,height do
         for c=1,width do 
-          --  local pixel=grid[l][c]
+            --  local pixel=grid[l][c]
             local pixel=pTable[l][width-c+1]
             if pixel==1 then
                 love.graphics.setColor(1,1,1,1)
-                love.graphics.rectangle("fill",x+(c)*size,y+l*size,size,size)
+                love.graphics.rectangle("fill",x+(c-1)*size,y+(l-1)*size,size,size)
             else
                 love.graphics.setColor(0,0,0,1)
-                love.graphics.rectangle("fill",x+(c)*size,y+l*size,size,size)
-           end
-            
+                love.graphics.rectangle("fill",x+(c-1)*size,y+(l-1)*size,size,size)
+            end
+
         end
     end
 end
@@ -132,7 +136,7 @@ function convertToByte(pTable)
         for c=1,#pTable[l] do 
             local n=math.pow(2,(8-c))*pTable[l][c]
             v=v+n
-        
+
         end
         resultText = resultText..(string.format("%x", v))..","  --%X pour hexa  %B
         table.insert(r,v)
@@ -141,7 +145,7 @@ function convertToByte(pTable)
     return r
 end
 function writeFile(pName,pData)
-   local file = io.open(pName,"wb")
+    local file = io.open(pName,"wb")
     file:write(string.char(nbLine))
     file:write(string.char(nbRows))
 
@@ -151,5 +155,5 @@ function writeFile(pName,pData)
             file:write(string.char(v))
         end
     end
-   file:close() 
+    file:close() 
 end
