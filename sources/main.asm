@@ -6,10 +6,10 @@
  
  processor 6803
 
-LevelStart equ 2
+LevelStart equ MaxLevel
 MaxLevel equ 26
 DEBUG equ 1
-sceneStart = sceneMenu
+sceneStart = sceneVictory
 std equ 1
 cart equ 2
 mode equ std   ; ici on choisi le type d'export
@@ -211,6 +211,7 @@ updateCurrentScene
    include "sources/sceneManager/scenes/sceneMenu.asm"
    include "sources/sceneManager/scenes/sceneNextLevel.asm"
    include "sources/sceneManager/scenes/sceneSelectLevel.asm"
+   include "sources/sceneManager/scenes/sceneVictory.asm"
    include "sources/utils.asm"
    include "sources/sprite.asm"
    include "sources/math.asm"

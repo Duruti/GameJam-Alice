@@ -24,13 +24,13 @@ initGame
    ; ldx #textGame
    ; ldd #$1010
    ; jsr drawText
+
+   ldaa #80 ; efface l'écran
+   jsr $FBD6
    
    jsr initLevel
 
 
-
-   ldaa #80 ; efface l'écran
-   jsr $FBD6
 
    
   jsr drawMap
@@ -364,7 +364,10 @@ isWin
    inca 
    cmpa #MaxLevel-1
    ble  nextIsWin
-   clra 
+
+   ldab #sceneVictory
+   jsr changeScene
+   rts
 nextIsWin
    staa currentLevel
    ldab #sceneNextLevel
