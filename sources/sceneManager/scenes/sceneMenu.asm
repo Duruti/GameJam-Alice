@@ -6,10 +6,49 @@ initMenu
    ldaa #1
    staa stateMusic
 
+
+   ; Charge le sprite LarcinLazer
+
+   ; Place la redefinition des caracterere en bank 4
+   ldaa #%10000100 ; DOR 
+   staa R0 
+   ldaa #$14 
+   staa R1+EXEC 
+   jsr BUSY
+
+   clra 
+   staa index
+   ldaa #30-1
+   staa nbByte
+   ldd #$2900 ; a=R4 et b = R5
+   std memoryTampon
+   ldx #larcinLazer+2
+   jsr loadDataSpriteGeneric
+
+
+
+   ; Larcin
+   ldaa #%00000011
+   staa colorR3Sprite
+
+   ldaa #10
+   staa tamponX 
+   ldaa #19
+   staa tamponY 
+   ldaa #6
+   staa colums
+   ldaa #5
+   staa lines 
+   clra
+   staa compteurLine
+   ldd #$2481
+   jsr drawSpriteGeneric
+
    ; affiche le texte
    ldx #textMenu
    ldd #$1010
    jsr drawText
+
 
    rts
 

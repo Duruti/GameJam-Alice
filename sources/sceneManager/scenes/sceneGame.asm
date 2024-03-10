@@ -1,4 +1,13 @@
 initGame
+
+
+   ; Place la redefinition des caracterere en bank 3
+   ldaa #%10000100 ; DOR 
+   staa R0 
+   ldaa #$13 
+   staa R1+EXEC 
+   jsr BUSY
+
    ; efface l'écran
    jsr $fbd4
    ldaa #-3
@@ -394,6 +403,7 @@ drawCurrentLevel
    ldd #$1608
    std $3280
    ldab currentLevel
+   incb 
    clra 
 
    jsr $F419
@@ -518,7 +528,7 @@ getIdAutomaticMove
    subb #idMoveUp ; décalle pour commencer a 0 
    lslb ; multiplie par 4 
    lslb 
-;   clrb
+ ;   clrb
    addb indexAnim
    addb indexAnim
 
@@ -539,20 +549,3 @@ getIdAutomaticMove
 textGame byte "SCENE GAME",0
 textBonus byte "BONUS",0
 textLevel byte "LEVEL",0
-vide 
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF

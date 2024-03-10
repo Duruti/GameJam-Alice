@@ -1,6 +1,56 @@
 
 color equ %01100000
 
+loadDataSpriteGeneric   
+startLoopGeneric
+   ; memoryTampon contient le tampon et le caractere de départ
+   
+   ldaa memoryTampon+1; on incremente le numero de caractere soit que les bit 0 et 1  
+   ldab index 
+   andb #3
+   aba 
+   staa R5 
+
+   ldaa  memoryTampon ; On incremente le numero de tampon + 1 tout les 4 caracteres
+   ldab index  ; on recupere l'index
+   lsrb  ; on decalle de 2 bits pour et on l'ajoute
+   lsrb 
+   aba 
+   staa R4
+   
+   
+   ldab #$0A ; 10 tranches 
+   ; x contient l'adresse sources
+
+   
+   ; r4=09 -> 0000 1001
+   ; r5=c0 -> 1100 0000
+BI010Generic
+   ldaa $0,x 
+   staa R1
+   ldaa #$34 ; %00110100 ecriture octet 
+   staa R0+EXEC
+   jsr BUSY 
+   inc R5
+   inc R5
+   inc R5
+   inc R5
+   inx 
+   decb
+   bne BI010Generic
+   ldaa nbByte
+   cmpa index
+   beq endLoadDataSpriteGeneric
+   inc index
+   
+   jmp startLoopGeneric
+endLoadDataSpriteGeneric 
+   clra 
+   staa index
+   rts
+
+
+
 loadDataSprite   
    
 startLoop
@@ -33,6 +83,54 @@ endLoadDataSprite
    clra 
    staa index
    rts
+;********  Routine de sprite Generique **********
+; Affiche un sprite en bichrome de taille variable
+;
+; couleur du sprite : colorR3Sprite
+; X : tamponX 
+; Y : TamponY 
+; nb ligne = lines 
+; nb colonnes = colums 
+; tampon et caractere du premier dessin : D 
+
+
+drawSpriteGeneric
+   ; D contient R1 et R2
+   std R1
+   clrb 
+   ldaa tamponY
+   staa R6
+   ldaa tamponX
+   staa R7
+
+loopLines 
+   ldaa tamponX
+   staa R7
+loopColum
+   ldaa colorR3Sprite
+   staa R3
+   ldaa #$01
+   staa R0+EXEC
+   jsr BUSY
+   inc R1
+   incb 
+   cmpb colums
+   bne loopColum 
+
+   clrb
+   ldaa R6
+   inca 
+   staa R6
+   ldaa compteurLine
+   inca 
+   staa compteurLine
+
+   cmpa lines 
+   bne loopLines
+
+   rts
+
+;**************************
 
 drawSprite3230
    std R1
@@ -214,7 +312,7 @@ restoreBackground
    jsr drawSprite3230
    rts
 drawVide
-   ldaa #%110000 
+   ldaa #%110000 ; fond jaune
    staa colorR3
    ldd #$0081 ; a=R1 b=R2
    jsr drawSprite3230

@@ -259,6 +259,18 @@ grids ={
             {8,0,0,8},
             {6,7,7,5}
         },
+ {
+            {1,7,7,1},
+            {8,0,0,8},  
+            {8,0,0,8},
+            {9,7,7,6}
+        },
+        {
+            {1,7,7,3},
+            {8,0,0,8},  
+            {8,0,0,8},
+            {1,7,7,10}
+        },
     }
 
 
@@ -266,9 +278,9 @@ function love.load()
      love.window.setMode( 1024, 768)
      table.insert(mapSprite,newMapSprite())
 
-    -- loadTiles()
+     --loadTiles()
      newLevels()
-    -- loadLevels()
+     loadLevels()
      --mapSprite=newMapSprite()
 --     mapSprite[2] = 1
    

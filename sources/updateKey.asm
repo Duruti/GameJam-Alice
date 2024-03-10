@@ -58,7 +58,7 @@ actionDownLevel
    bne P
    ; ...
    ldaa currentLevel
-   cmpa #1
+   cmpa #0
    beq endActionDownLevel
    deca 
    staa currentLevel

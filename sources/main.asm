@@ -6,10 +6,10 @@
  
  processor 6803
 
-LevelStart equ 10
+LevelStart equ 2
 MaxLevel equ 26
 DEBUG equ 1
-sceneStart = sceneGame
+sceneStart = sceneMenu
 std equ 1
 cart equ 2
 mode equ std   ; ici on choisi le type d'export
@@ -57,6 +57,7 @@ startCopyCode
   std adressTamponCopy ; tampon 
   jsr copyData
 
+  ;jmp $3500 ; pour test sur emulateur
 
  ; code pour transferer la 2 eme Bank en RAM
   ldaa #1 ; choix bank 2
@@ -201,10 +202,6 @@ updateCurrentScene
 
 
 
-; ****  DATA SPRITE *****
-dataSprite 
- include "sources/dataGFX.asm"
-endDataSprite
 
 
    include "sources/interrup.asm"
@@ -316,8 +313,18 @@ lstTorch ds 10,0
 indexAutomaticMove byte 0
 lstAutomaticMove ds 60,0
 
+colorR3Sprite byte %00000011
+colums byte 5 ; 6-1
+lines byte 0
+compteurLine byte 0
+
 
 endVariable 
+
+; ****  DATA SPRITE *****
+dataSprite 
+ include "sources/dataGFX.asm"
+endDataSprite
 
 ; **** DATA LEVELS  *****
 dataLevel
@@ -361,7 +368,10 @@ sizeVariable = endVariable-startVariable
  echo "size DATA ",sizeLevel + sizeSprite + sizeVariable
  echo "Total Size ",sizeCode + sizeLevel + sizeSprite + sizeVariable
  echo "***** DEBUG INFO  ***** "
-  echo "rorg : ",indexAutomaticMove
+ echo "gfx : ",dataSprite
+ echo "variable : ", startVariable
+ echo "level : ",dataLevel
+
 ;  echo "Y ",Ypos 
 ;  echo "currentmap ",currentMapSprite 
 ;  echo "StatusMove ",statusAutomaticMove

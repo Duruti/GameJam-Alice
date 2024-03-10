@@ -23,6 +23,11 @@ initLevel
    ; ldaa #$13 
    ; staa R1+EXEC 
    ; jsr BUSY
+   clra 
+   staa index
+   
+   ldaa #4-1
+   staa nbByte
 
    ldd #$09c0 ; a=R4 et b = R5
    ;std startLoop+1
