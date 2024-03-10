@@ -19,7 +19,7 @@ drawTextloop
    staa R1
    ldaa #%0000000
    staa R2
-   ldaa #$34			;	attribut du caractère
+   ldaa colorText			;	attribut du caractère
    staa R3	
    
    ldaa #$00			;	commande  KRF affichage en 40 carateres

@@ -9,7 +9,7 @@
 LevelStart equ MaxLevel
 MaxLevel equ 26
 DEBUG equ 1
-sceneStart = sceneVictory
+sceneStart = sceneMenu
 std equ 1
 cart equ 2
 mode equ std   ; ici on choisi le type d'export
@@ -268,6 +268,7 @@ value byte 0
 statusJoy byte 0
 result byte 0 
 tempoText byte 0
+colorText byte 0 
 isStart byte 0
 scoreBonus byte 0
 colorR3 byte 0
