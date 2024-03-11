@@ -6,6 +6,7 @@
 
 getKey
 
+
    clra 
    staa newKey
 

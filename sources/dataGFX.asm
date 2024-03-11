@@ -26,7 +26,8 @@ moveleft2 incbin "sprites/moveleft2.bin"
 larcinLazer incbin "sprites/larcinLazer.bin"
 eyesLeft incbin "sprites/eyesLeft.bin"
 eyesRight incbin "sprites/eyesRight.bin"
-
+theEnd incbin "sprites/theEnd.bin"
+bandeauEnd incbin "sprites/bandeauEnd.bin"
 vide 
    byte $FF,$FF,$FF,$FF
    byte $FF,$FF,$FF,$FF

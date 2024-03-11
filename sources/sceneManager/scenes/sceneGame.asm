@@ -62,12 +62,13 @@ initGame
    staa idSpritePerso
    rts 
 updateGame
-
    ; jsr vbl
    jsr AnimSprite
+  
    ldaa statusAutomaticMove
    bne jmpMovePlayerAutomatic
    jsr getKey
+   
    jsr updateKey   
   
    ldaa isStart
@@ -76,6 +77,7 @@ updateGame
 escapeKey
 suiteUpdateGame   
    
+  ; jmp endUpdateGame
    jsr isAutomaticMove
    jsr isBonus
    jsr isTorche
@@ -139,6 +141,9 @@ endDrawTrap
 
 shadowTrap
    ; efface les pieges
+   
+   ldaa indexPiege
+   beq endShadowTrap
    clrb 
    ldx #lstPiege
 
@@ -159,6 +164,7 @@ loopST
    incb
    cmpb indexPiege
    bne loopST
+endShadowTrap
    rts
 
 

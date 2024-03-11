@@ -6,10 +6,10 @@
  
  processor 6803
 
-LevelStart equ MaxLevel
+LevelStart equ 1; MaxLevel
 MaxLevel equ 26
 DEBUG equ 1
-sceneStart = sceneMenu
+sceneStart = sceneGame
 std equ 1
 cart equ 2
 mode equ std   ; ici on choisi le type d'export
@@ -161,7 +161,8 @@ startCodeCart
   staa colorPlayer
   clra
   staa scoreBonus
-
+  ldaa #$6
+  staa colorText
 
  
 
@@ -215,8 +216,8 @@ updateCurrentScene
    include "sources/utils.asm"
    include "sources/sprite.asm"
    include "sources/math.asm"
-   include "sources/keyManager.asm"
    include "sources/updateKey.asm"
+   include "sources/keyManager.asm"
    include "sources/ghost.asm"
    include "sources/key.asm"
    include "sources/automaticMove.asm"
@@ -322,7 +323,7 @@ compteurLine byte 0
 
 
 endVariable 
-
+ align 64
 ; ****  DATA SPRITE *****
 dataSprite 
  include "sources/dataGFX.asm"

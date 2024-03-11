@@ -5,7 +5,7 @@ initMenu
    ldaa #80 ; efface l'écran
    jsr $FBD6
 
-   ldaa #1
+   ldaa #0
    staa stateMusic
 
 

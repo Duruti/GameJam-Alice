@@ -318,7 +318,6 @@ drawVide
    jsr drawSprite3230
    rts
 drawPlayer   
-
    ldaa Xpos
    ldab Ypos
    jsr getPosition

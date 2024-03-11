@@ -51,7 +51,7 @@ drawTextTempo
 
 
 vbl
-
+   rts
 vbl0 ; attend que Vsync soit a 0
    ldaa R0
    anda #%00000100
