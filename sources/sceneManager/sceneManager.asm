@@ -6,9 +6,10 @@ sceneGameOver equ 2
 sceneNextLevel equ 3
 sceneSelectLevel equ 4
 sceneVictory  equ 5
+sceneNoBonus equ 6
 
-adrUpdateScene word updateMenu,updateGame,updateGameOver,updateNextLevel,updateSelectLevel,updateVictory
-adrInitScene word initMenu,initGame,initGameOver,initNextLevel,initSelectLevel,initVictory
+adrUpdateScene word updateMenu,updateGame,updateGameOver,updateNextLevel,updateSelectLevel,updateVictory,updateNoBonus
+adrInitScene word initMenu,initGame,initGameOver,initNextLevel,initSelectLevel,initVictory,initNoBonus
 
 
 changeScene 

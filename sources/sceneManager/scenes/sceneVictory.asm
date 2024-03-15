@@ -1,6 +1,7 @@
 initVictory
    ;efface l'ecran
-   ;jsr $fbd4
+   ldab #$80
+   jsr $fbd6
 
    ldaa #$6
    staa colorText

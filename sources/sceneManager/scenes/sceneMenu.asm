@@ -1,11 +1,14 @@
 colorEyes equ %00000111
 
 initMenu
+   clra 
+   staa indexMusic
+
    ; efface l'ecran
-   ldaa #80 ; efface l'écran
+   ldab #0 ; efface l'écran
    jsr $FBD6
 
-   ldaa #0
+   ldaa #1
    staa stateMusic
 
 
@@ -116,22 +119,61 @@ initMenu
    ldd #$061D
    jsr drawText
 
+   ; reactive l'interruption OCF
+   ldaa $08
+   oraa #%00001101 
+   staa $08
+
    rts
 
 updateMenu
-    jsr getKey
+   jsr getKeyMenu
     jsr updateKeyMenu   
     ldaa newKey
     staa oldKey
    rts 
+getKeyMenu 
+   ldaa tempoGhost
+   anda #1 
+   bne endGetKeyMenu
+
+   clra 
+   staa newKey
+   
+   ;testEspace
+   ; pour Espace = Fire
+   sei
+   ldaa #$7F ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
+   staa PORT1
+   ldaa IO ; on récupere les infos dans IO
+   cli  ; ldaa IO ; on récupere les infos dans IO
+   anda #%00001000 ; on test le bit 3 , si il vaut 0 alors 
+   bne endTestMenu
+   ; mets le bit 3 de newKey a 1  
+   ldaa #%1
+   oraa newKey
+   staa newKey
+
+   ; inverse newKey pour faciliter les tests ensuite
+endTestMenu 
+   
+   neg newKey
+   dec newKey 
+endGetKeyMenu
+   rts
 
 exitMenu
    ; coupe la musique
    ldaa #0
    staa stateMusic
 
+   sei 
+   ldaa $08
+   anda #%11110111 ; stop l'interruption OCF 
+   staa $08
    ldab #sceneGame
    jsr changeScene
+   cli 
    rts
 
 updateKeyMenu

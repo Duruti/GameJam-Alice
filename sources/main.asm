@@ -7,12 +7,13 @@
  processor 6803
 
 LevelStart equ 1; MaxLevel
+valueStartBonus equ 0
 MaxLevel equ 26
 DEBUG equ 1
-sceneStart = sceneGame
+sceneStart = sceneMenu
 std equ 1
 cart equ 2
-mode equ std   ; ici on choisi le type d'export
+mode equ cart  ; ici on choisi le type d'export
 
  if mode=std
   echo "std"
@@ -96,7 +97,7 @@ startCodeCart
  endif
 
   
-
+; initialisation
 
    include "sources/constante.asm"
  
@@ -107,9 +108,12 @@ startCodeCart
    jsr INASS
 
 
-  ldaa #80 ; efface l'écran
+  ldab #$0 ; efface l'écran
   jsr $FBD6
 
+
+
+ 
     ; charge la longueur de la musique
   ldx #music
   ldaa 0,x 
@@ -159,12 +163,13 @@ startCodeCart
   staa colorR3
   ldaa colorSprite+1
   staa colorPlayer
-  clra
+  ldaa #valueStartBonus
   staa scoreBonus
   ldaa #$6
   staa colorText
 
- 
+
+
 
    if mode=cart 
     ; copie dans la ram la gameloop pour automodification
@@ -188,8 +193,12 @@ startCodeCart
     ldaa #$39 ; rts
     staa 9,x 
    endif
+
+
    ldab #sceneStart
+  sei
    jsr changeScene
+  cli
    ; jsr initGame
  if mode=std
    
@@ -197,7 +206,6 @@ updateCurrentScene
    jsr updateGame ; automodifié
    jmp updateCurrentScene
  else 
-
    jmp $3350  
  endif
 
@@ -213,6 +221,7 @@ updateCurrentScene
    include "sources/sceneManager/scenes/sceneNextLevel.asm"
    include "sources/sceneManager/scenes/sceneSelectLevel.asm"
    include "sources/sceneManager/scenes/sceneVictory.asm"
+   include "sources/sceneManager/scenes/sceneNoBonus.asm"
    include "sources/utils.asm"
    include "sources/sprite.asm"
    include "sources/math.asm"
@@ -272,6 +281,7 @@ tempoText byte 0
 colorText byte 0 
 isStart byte 0
 scoreBonus byte 0
+saveScoreBonus byte 0
 colorR3 byte 0
 colorPlayer byte 0
 colorPiege byte 0
@@ -287,6 +297,7 @@ currentMapSprite ds width*height,0
 indexPiege byte 0
 indexGhost byte 0
 indexKey byte 0
+
 tempoGhost byte 0
 tempoAutomaticMove byte 0 
 speedAutomaticMove equ 30
@@ -371,7 +382,7 @@ sizeVariable = endVariable-startVariable
  echo "size DATA ",sizeLevel + sizeSprite + sizeVariable
  echo "Total Size ",sizeCode + sizeLevel + sizeSprite + sizeVariable
  echo "***** DEBUG INFO  ***** "
- echo "gfx : ",dataSprite
+ echo "TOF : ",TOFInterrupt
  echo "variable : ", startVariable
  echo "level : ",dataLevel
 

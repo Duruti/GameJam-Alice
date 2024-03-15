@@ -3,13 +3,16 @@
 ; bit    7  6    5    4 3 2 1 0
 ;        O  P   Break  Z Q S D Espace
 
-
+endGetKey
+   rts
 getKey
 
+   ldaa tempoGhost
+   anda #1 
+   bne endGetKey
 
    clra 
    staa newKey
-
    ; O 
    ldaa #$7F ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
    staa PORT1

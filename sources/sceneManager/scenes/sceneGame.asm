@@ -1,5 +1,6 @@
 initGame
-
+   ldaa #0
+  staa stateMusic
 
    ; Place la redefinition des caracterere en bank 3
    ldaa #%10000100 ; DOR 
@@ -60,6 +61,8 @@ initGame
 
    ldaa $74
    staa idSpritePerso
+   ldaa scoreBonus 
+   staa saveScoreBonus
    rts 
 updateGame
    ; jsr vbl
@@ -67,14 +70,15 @@ updateGame
   
    ldaa statusAutomaticMove
    bne jmpMovePlayerAutomatic
-   jsr getKey
-   
-   jsr updateKey   
+  
+    jsr getKey
+    jsr updateKey   
   
    ldaa isStart
    bne controlKey
 
 escapeKey
+
 suiteUpdateGame   
    
   ; jmp endUpdateGame
@@ -358,6 +362,10 @@ isGameover
    
    rts 
 trueGameover
+   ; remet le compteur des bonus a son etat initial
+   ldaa saveScoreBonus
+   staa scoreBonus
+
    ldab #sceneGameOver
    jsr changeScene
    rts
@@ -367,7 +375,13 @@ isWin
    cmpa #2
    bne endIsWin 
    ldaa currentLevel
-   inca 
+   inca
+   ; test si on a assez de bonus pour continuer après le level 20
+   cmpa #20
+   beq controlIfBonusIsOk
+
+
+   ; si on est au dernier level
    cmpa #MaxLevel-1
    ble  nextIsWin
 
@@ -380,7 +394,14 @@ nextIsWin
    jsr changeScene
 endIsWin
    rts 
-
+controlIfBonusIsOk
+   ldab scoreBonus
+   cmpb #18 
+   beq nextIsWin 
+   ; ici on change la scene 
+   ldab #sceneNoBonus
+   jsr changeScene
+   rts
 eraseSprite
    ; efface dans la map le sprite
    ; calcul de l'index = Ypos*12 + Xpos 

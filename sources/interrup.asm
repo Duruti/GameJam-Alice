@@ -10,33 +10,33 @@ initInterruption
    staa indexMusic
    staa impuls
  
-   ; redirige l'interruption TOF 
-   ldaa #$7e
-   staa $3203
-   ldd #TOFInterrupt
-   std $3204
+  ;  redirige l'interruption TOF 
+    ldaa #$7e
+    staa $3203
+    ldd #TOFInterrupt
+    std $3204
 
-   ; redirige l'interruption OCF 
-   ldaa #$7e
-   staa $3206
-   ldd #OCFInterrupt
-   std $3207
-
-
+   ;redirige l'interruption OCF 
+    ldaa #$7e
+    staa $3206
+    ldd #OCFInterrupt
+    std $3207
 
 
-   ldaa $08
-   ldd $09 ; lit le compteur
-   addd note
-   std $b
+
+
+  ldaa $08
+  ldd $09 ; lit le compteur
+  addd note
+  std $b
 
    ldaa $08
    oraa #%00001101 ; met a 1 le bit EOCI et le bit OLVL pour autoriser l'interruption OCF
    staa $08
    
-   
    cli ; on active le bit i du drapeau
    rts
+
 TOFInterrupt
    ; interruption déclenché toutes les 65.5 ms
    ; remet le compteur d'interruption a zero
@@ -156,6 +156,7 @@ nextNext
    staa duree
    rts
 playSilence
+
    ; joue un silence 
    ldaa #1
    staa isPlayingSilence
@@ -169,14 +170,5 @@ playSilence
 
 
 
-
-; octave 2
-;      1/2 periode µS  , decalage   Frequence
 do equ      3846; +154        ;130
-re equ      3425;           +150        ;146
-mi equ      3048;           +150        ;164
-fa equ      2857 ;          +140        ;175   
-sol equ     2551  ;         +125        ;196
-la equ      2272   ;        +110        ;220
-si equ      2024    ;       +90         ;247
-mi4 equ     760 ; -30      ; 659
+
