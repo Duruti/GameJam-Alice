@@ -28,7 +28,23 @@ eyesLeft incbin "sprites/eyesLeft.bin"
 eyesRight incbin "sprites/eyesRight.bin"
 theEnd incbin "sprites/theEnd.bin"
 bandeauEnd incbin "sprites/bandeauEnd.bin"
-vide 
+logo incbin "sprites/logo.bin"            
+; cadre incbin "sprites/cadre.bin"            
+ligneGame
+   byte 1,40
+   byte 26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26
+   byte 26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26
+cadre
+   byte 5,18
+   byte 22,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,28
+   byte 21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,21
+   byte 21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,21
+   byte 21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,21
+   byte 19,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,25
+
+vide
+   incbin "sprites/pas.bin"
+   
    byte $FF,$FF,$FF,$FF
    byte $FF,$FF,$FF,$FF
    byte $FF,$FF,$FF,$FF

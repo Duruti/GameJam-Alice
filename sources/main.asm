@@ -231,7 +231,7 @@ updateCurrentScene
    include "sources/key.asm"
    include "sources/automaticMove.asm"
    include "sources/levelManager/level.asm"
-
+   include "sources/drawLogo.asm"
 
 
 endCode
@@ -332,6 +332,10 @@ colums byte 5 ; 6-1
 lines byte 0
 compteurLine byte 0
 
+nbLineLogo byte 1
+nbColumsLogo byte 4
+logoR2 byte 0
+logoR3 byte 0
 
 endVariable 
  align 64

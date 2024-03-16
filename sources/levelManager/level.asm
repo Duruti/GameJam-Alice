@@ -156,7 +156,7 @@ initLevel
 
    ldd #$00c0 ; a=R4 et b = R5
    std memoryTampon
-   ldx #vide
+   ldx #vide+2
    jsr loadDataSprite
 
    ; ecrit dans la bank 

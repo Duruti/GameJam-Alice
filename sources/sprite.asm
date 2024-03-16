@@ -312,7 +312,7 @@ restoreBackground
    jsr drawSprite3230
    rts
 drawVide
-   ldaa #%110000 ; fond jaune
+   ldaa #%00000011 ; fond jaune
    staa colorR3
    ldd #$0081 ; a=R1 b=R2
    jsr drawSprite3230

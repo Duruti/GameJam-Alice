@@ -8,9 +8,7 @@ initMenu
    ldab #0 ; efface l'écran
    jsr $FBD6
 
-   ldaa #1
-   staa stateMusic
-
+  
 
    ldaa #$6
    staa colorText
@@ -47,12 +45,29 @@ initMenu
    ldx #eyesRight+2
    jsr loadDataSpriteGeneric
 
+   ; affiche le logo
+   ldaa #15
+   staa tamponY 
+   ldaa #0
+   staa tamponX 
+   ldaa #%00100001
+   staa logoR2
+   ldaa #%01100000
+   staa logoR3
 
+   ldx #logo 
+   ldaa 0,x 
+   staa nbLineLogo 
+   ldaa 1,x 
+   staa nbColumsLogo 
+   
+   jsr drawLogo
 
+ 
    ; affiche le texte
-   ldx #textMenu
-   ldd #$0E10
-   jsr drawText
+   ; ldx #textMenu
+   ; ldd #$0E10
+   ; jsr drawText 
 
 
 
@@ -119,18 +134,24 @@ initMenu
    ldd #$061D
    jsr drawText
 
+
+
+
    ; reactive l'interruption OCF
    ldaa $08
    oraa #%00001101 
    staa $08
 
+   ldaa #1
+   staa stateMusic
+
    rts
 
 updateMenu
    jsr getKeyMenu
-    jsr updateKeyMenu   
-    ldaa newKey
-    staa oldKey
+   jsr updateKeyMenu   
+   ldaa newKey
+   staa oldKey
    rts 
 getKeyMenu 
    ldaa tempoGhost

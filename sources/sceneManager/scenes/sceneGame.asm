@@ -2,6 +2,9 @@ initGame
    ldaa #0
   staa stateMusic
 
+   ldaa #%01110000
+   staa colorText
+
    ; Place la redefinition des caracterere en bank 3
    ldaa #%10000100 ; DOR 
    staa R0 
@@ -45,11 +48,11 @@ initGame
    staa oldPosY
 
    ldx #textBonus
-   ldd #$111D
+   ldd #$181D
    jsr drawText
 
    ldx #textLevel
-   ldd #$021D
+   ldd #$091D
    jsr drawText
 
    clra 
@@ -63,6 +66,25 @@ initGame
    staa idSpritePerso
    ldaa scoreBonus 
    staa saveScoreBonus
+
+
+   ldaa #27
+   staa tamponY 
+   ldaa #0
+   staa tamponX 
+   ldaa #%00110001
+   staa logoR2
+   ldaa #%00110000
+   staa logoR3
+
+   ldx #ligneGame 
+   ldaa 0,x 
+   staa nbLineLogo 
+   ldaa 1,x 
+   staa nbColumsLogo 
+   
+   jsr drawLogo
+
    rts 
 updateGame
    ; jsr vbl
@@ -422,7 +444,7 @@ exitGame
    jsr changeScene
    rts
 drawScoreBonus
-   ldd #$1617
+   ldd #$161E
    std $3280
    ldab scoreBonus
    clra 
@@ -430,7 +452,7 @@ drawScoreBonus
    jsr $F419
    rts
 drawCurrentLevel
-   ldd #$1608
+   ldd #$160F
    std $3280
    ldab currentLevel
    incb 

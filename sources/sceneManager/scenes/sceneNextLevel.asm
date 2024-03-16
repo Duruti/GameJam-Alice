@@ -3,8 +3,30 @@ initNextLevel
   ; jsr $fbd4
    ; affiche le texte
    jsr drawTrap
+
+   ldaa #%01100000
+   staa colorText
+
+   ldaa #16
+   staa tamponY 
+   ldaa #11
+   staa tamponX 
+   ldaa #%00110001
+   staa logoR2
+   ldaa #%00110000
+   staa logoR3
+
+   ldx #cadre 
+   ldaa 0,x 
+   staa nbLineLogo 
+   ldaa 1,x 
+   staa nbColumsLogo 
+   
+   jsr drawLogo
+
+
    ldx #textNextLevel
-   ldd #$1010
+   ldd #$1012
    jsr drawText
    rts 
 updateNextLevel
