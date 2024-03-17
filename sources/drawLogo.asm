@@ -40,6 +40,7 @@ drawCaractereLogo
    staa R3
    ldaa #0
    staa R0+EXEC
+   jsr BUSY
    rts 
 
 

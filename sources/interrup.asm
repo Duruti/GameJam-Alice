@@ -50,7 +50,13 @@ TOFInterrupt
    inc timerAnimation
    ldaa #1
    staa isAnim
+
+   ldaa isSceneMenu
+   cmpa #1
+   beq testMenu 
+
    ; gere la durée de la note avec le compteur
+nextTof
    inc compteur
    ldab compteur 
    cmpb duree 
@@ -58,6 +64,13 @@ TOFInterrupt
    jsr action
 endTof
    rti 
+testMenu 
+   jsr getKeyMenu 
+   jsr updateKeyMenu   
+   ldaa newKey
+   staa oldKey
+
+   jmp nextTof 
 
 OCFInterrupt
    ; interruption déclenché quand le compteur = compteur de sortie

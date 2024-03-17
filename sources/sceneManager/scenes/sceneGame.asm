@@ -1,6 +1,11 @@
+colorTextHub equ #%01110000
+
 initGame
+   ldab #0 ; efface l'écran
+   jsr $FBD6
+
    ldaa #0
-  staa stateMusic
+   staa stateMusic
 
    ldaa #%01110000
    staa colorText
@@ -13,7 +18,7 @@ initGame
    jsr BUSY
 
    ; efface l'écran
-   jsr $fbd4
+;   jsr $fbd4
    ldaa #-3
    staa colonneMap
    ldaa #8
@@ -66,15 +71,15 @@ initGame
    staa idSpritePerso
    ldaa scoreBonus 
    staa saveScoreBonus
-
-
+   
+   ; ligne du HUD
    ldaa #27
    staa tamponY 
    ldaa #0
    staa tamponX 
    ldaa #%00110001
    staa logoR2
-   ldaa #%00110000
+   ldaa #%01100000
    staa logoR3
 
    ldx #ligneGame 
@@ -444,6 +449,8 @@ exitGame
    jsr changeScene
    rts
 drawScoreBonus
+   ldaa colorTextHub
+   staa $FB
    ldd #$161E
    std $3280
    ldab scoreBonus
@@ -452,6 +459,8 @@ drawScoreBonus
    jsr $F419
    rts
 drawCurrentLevel
+   ldaa colorTextHub
+   staa $FB
    ldd #$160F
    std $3280
    ldab currentLevel

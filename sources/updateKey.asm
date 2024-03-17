@@ -88,7 +88,9 @@ actionBreak
    anda #%100000
    bne Z
    ldab #sceneMenu ; retour au menu
+   sei
    jsr changeScene
+   cli
    jmp endAction
 
 actionZ 

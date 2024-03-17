@@ -112,7 +112,8 @@ startCodeCart
   jsr $FBD6
 
 
-
+  clra 
+  staa isSceneMenu
  
     ; charge la longueur de la musique
   ldx #music
@@ -239,6 +240,8 @@ endCode
 ; **** DATA VARIABLES ****
 
 startVariable 
+
+isSceneMenu byte 0
 
 ; music
 

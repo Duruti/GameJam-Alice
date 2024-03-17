@@ -4,6 +4,8 @@ initNextLevel
    ; affiche le texte
    jsr drawTrap
 
+   sei 
+
    ldaa #%01100000
    staa colorText
 
@@ -28,6 +30,9 @@ initNextLevel
    ldx #textNextLevel
    ldd #$1012
    jsr drawText
+   
+   cli 
+   
    rts 
 updateNextLevel
 

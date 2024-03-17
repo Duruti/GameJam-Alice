@@ -138,9 +138,13 @@ initMenu
 
 
    ; reactive l'interruption OCF
-   ldaa $08
-   oraa #%00001101 
+ ;  ldaa $08
+ ;   oraa #%00001101 
+   ldaa #%00001101
    staa $08
+
+
+  ; charge la premier note 
 
    ldaa #1
    staa stateMusic
@@ -148,26 +152,42 @@ initMenu
    rts
 
 updateMenu
-   jsr getKeyMenu
-   jsr updateKeyMenu   
-   ldaa newKey
-   staa oldKey
+  ldaa #1 
+  staa isSceneMenu
+
+  ; jsr getKeyMenu
+  ; jsr updateKeyMenu   
+  ; ldaa newKey
+  ; staa oldKey
+   ldaa #15
+   staa R6
+   ldaa #10
+   staa R7
+   ldaa $09
+   staa R1
+   ldaa #%00100000
+   staa R2
+   ldaa #%00010000
+   staa R3
+   ldaa #0
+   staa R0+EXEC
+
    rts 
 getKeyMenu 
-   ldaa tempoGhost
-   anda #1 
-   bne endGetKeyMenu
+ ;  ldaa tempoGhost
+ ;  anda #1 
+ ;  bne endGetKeyMenu
 
    clra 
    staa newKey
    
    ;testEspace
    ; pour Espace = Fire
-   sei
+ ;   sei
    ldaa #$7F ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
    staa PORT1
    ldaa IO ; on récupere les infos dans IO
-   cli  ; ldaa IO ; on récupere les infos dans IO
+ ;   cli  ; ldaa IO ; on récupere les infos dans IO
    anda #%00001000 ; on test le bit 3 , si il vaut 0 alors 
    bne endTestMenu
    ; mets le bit 3 de newKey a 1  
@@ -187,14 +207,15 @@ exitMenu
    ; coupe la musique
    ldaa #0
    staa stateMusic
+   staa isSceneMenu
 
-   sei 
+ ;  sei 
    ldaa $08
    anda #%11110111 ; stop l'interruption OCF 
    staa $08
    ldab #sceneGame
    jsr changeScene
-   cli 
+ ;  cli 
    rts
 
 updateKeyMenu
