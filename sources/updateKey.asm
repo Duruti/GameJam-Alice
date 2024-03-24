@@ -87,6 +87,9 @@ actionBreak
    ldaa newKey 
    anda #%100000
    bne Z
+   clra
+   staa currentLevel
+   
    ldab #sceneMenu ; retour au menu
    sei
    jsr changeScene

@@ -8,12 +8,12 @@
 
 LevelStart equ 1; MaxLevel
 valueStartBonus equ 0
-MaxLevel equ 26
-DEBUG equ 1
+MaxLevel equ 27
+DEBUG equ 0
 sceneStart = sceneMenu
 std equ 1
 cart equ 2
-mode equ cart  ; ici on choisi le type d'export
+mode equ std  ; ici on choisi le type d'export
 
  if mode=std
   echo "std"

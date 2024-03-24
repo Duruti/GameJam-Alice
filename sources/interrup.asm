@@ -51,9 +51,9 @@ TOFInterrupt
    ldaa #1
    staa isAnim
 
-   ldaa isSceneMenu
-   cmpa #1
-   beq testMenu 
+;   ldaa isSceneMenu
+;   cmpa #1
+;   beq testMenu 
 
    ; gere la durée de la note avec le compteur
 nextTof

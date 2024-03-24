@@ -10,8 +10,7 @@ initMenu
 
   
 
-   ldaa #$6
-   staa colorText
+ 
    ; Charge le sprite LarcinLazer
 
    ; Place la redefinition des caracterere en bank 4
@@ -107,6 +106,15 @@ initMenu
    ldd #$5C81
    jsr drawSpriteGeneric
 
+   ; info code et GFX 
+   ldaa #%01010000
+   staa colorText
+
+   ldx #textCode
+   ldd #$000
+   jsr drawText
+
+
 
    ; Larcin
    ldaa #%00000011
@@ -124,6 +132,9 @@ initMenu
    staa compteurLine
    ldd #$2481
    jsr drawSpriteGeneric
+
+   ldaa #$6
+   staa colorText
 
    ; text Larcin
    ldx #textMenuLarcin
@@ -152,42 +163,43 @@ initMenu
    rts
 
 updateMenu
-  ldaa #1 
-  staa isSceneMenu
+;   ldaa #1 
+;   staa isSceneMenu
 
-  ; jsr getKeyMenu
-  ; jsr updateKeyMenu   
-  ; ldaa newKey
-  ; staa oldKey
-   ldaa #15
-   staa R6
-   ldaa #10
-   staa R7
-   ldaa $09
-   staa R1
-   ldaa #%00100000
-   staa R2
-   ldaa #%00010000
-   staa R3
-   ldaa #0
-   staa R0+EXEC
+  jsr getKeyMenu
+
+  jsr updateKeyMenu   
+  ldaa newKey
+  staa oldKey
+   ; ldaa #15
+   ; staa R6
+   ; ldaa #10
+   ; staa R7
+   ; ldaa $09
+   ; staa R1
+   ; ldaa #%00100000
+   ; staa R2
+   ; ldaa #%00010000
+   ; staa R3
+   ; ldaa #0
+   ; staa R0+EXEC
 
    rts 
 getKeyMenu 
- ;  ldaa tempoGhost
- ;  anda #1 
- ;  bne endGetKeyMenu
+   ldaa tempoGhost
+   anda #1 
+   bne endGetKeyMenu
 
    clra 
    staa newKey
    
    ;testEspace
    ; pour Espace = Fire
- ;   sei
    ldaa #$7F ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
    staa PORT1
+   sei
    ldaa IO ; on récupere les infos dans IO
- ;   cli  ; ldaa IO ; on récupere les infos dans IO
+   cli  ; ldaa IO ; on récupere les infos dans IO
    anda #%00001000 ; on test le bit 3 , si il vaut 0 alors 
    bne endTestMenu
    ; mets le bit 3 de newKey a 1  
@@ -198,10 +210,13 @@ getKeyMenu
    ; inverse newKey pour faciliter les tests ensuite
 endTestMenu 
    
+   jsr getJoystick
    neg newKey
    dec newKey 
 endGetKeyMenu
    rts
+
+
 
 exitMenu
    ; coupe la musique
@@ -237,6 +252,7 @@ endActionMenu
 
 
 
-textMenu byte "IN THE DARK",0
+textCode byte "CODE: DURUTI                 GFX: PiiiXL",0
+textGreat byte "Testeur sur Alice : BROCHIMAN",0
 textMenuLarcin byte     "DEMAKE DU JEU LARCIN LAZER",0
 textMenuLienLarcin byte "https://tambouillestudio.com/",0

@@ -1,6 +1,6 @@
 initVictory
    ;efface l'ecran
-   ldab #$80
+   ldab #$0
    jsr $fbd6
 
    ldaa #$6
@@ -82,18 +82,57 @@ initVictory
    ldx #textVictory
    ldd #$1010
 ;   jsr drawText
+
+   ldaa #%000000
+   staa $08
+
    rts 
 updateVictory
 
-   jsr getKey  
-   jsr updateKeyVictory    
+ ;  jsr getKey  
+ ;  jsr updateKeyVictory    
+ 
+  ; ldaa newKey
+  ; staa oldKey
+   ;*****  PATCH CLAVIER *****
+   
+   jsr INPUTKEY
+   cmpa #$20
+   beq exitVictory
+   bne testJoyVictory 
+   rts 
+
+testJoyVictory
+   clra 
+   staa newKey
+   jsr getJoystick
+   neg newKey
+   dec newKey 
+
+   jsr updateKeyVictory
+   
    ldaa newKey
    staa oldKey
+   
    rts 
-  
+
 exitVictory
+
+   ldaa #%10 ; force la barre espace 
+   staa newKey
+   neg newKey
+   dec newKey 
+
+   ldaa newKey
+   staa oldKey 
+
+   clra 
+   staa currentLevel
+   staa scoreBonus
+   sei 
    ldab #sceneMenu
    jsr changeScene
+   cli
    rts
 updateKeyVictory
 

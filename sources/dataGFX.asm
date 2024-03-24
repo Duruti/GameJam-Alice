@@ -28,7 +28,12 @@ eyesLeft incbin "sprites/eyesLeft.bin"
 eyesRight incbin "sprites/eyesRight.bin"
 theEnd incbin "sprites/theEnd.bin"
 bandeauEnd incbin "sprites/bandeauEnd.bin"
-logo incbin "sprites/logo.bin"            
+logo incbin "sprites/logo.bin"
+catNoBonus1 incbin "sprites/catNoBonus1.bin"
+catNoBonus2 incbin "sprites/catNoBonus2.bin"
+catNoBonus3 incbin "sprites/catNoBonus3.bin"
+catNoBonus4 incbin "sprites/catNoBonus4.bin"
+
 ; cadre incbin "sprites/cadre.bin"            
 ligneGame
    byte 1,40
@@ -45,19 +50,19 @@ cadre
 vide
    incbin "sprites/pas.bin"
    
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
-   byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF
+   ; byte $FF,$FF,$FF,$FF

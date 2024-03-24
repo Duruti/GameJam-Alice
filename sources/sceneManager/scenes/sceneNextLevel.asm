@@ -28,21 +28,64 @@ initNextLevel
 
 
    ldx #textNextLevel
-   ldd #$1012
+   ldd #$1112
    jsr drawText
    
    cli 
    
    rts 
 updateNextLevel
+   ; ldaa #15
+   ; staa R6
+   ; ldaa #10
+   ; staa R7
+   ; ldaa $09
+   ; staa R1
+   ; ldaa #%00100000
+   ; staa R2
+   ; ldaa #%01010000
+   ; staa R3
+   ; ldaa #0
+   ; staa R0+EXEC
+  
+  ; jsr getKey
+  ; jsr updateKeyNextLevel   
+ ;  ldaa newKey
+ ;  staa oldKey
 
-   jsr getKey
-   jsr updateKeyNextLevel   
+   ;*****  PATCH CLAVIER *****
+   
+   jsr INPUTKEY
+   cmpa #$20
+   beq exitNextLevel
+   bne testJoyNextLevel
+
+   rts 
+
+testJoyNextLevel
+   clra 
+   staa newKey
+   jsr getJoystick
+   neg newKey
+   dec newKey 
+
+   jsr updateKeyNextLevel
+   
    ldaa newKey
    staa oldKey
+   
    rts 
-  
+
+
 exitNextLevel
+   ldaa #%10 ; force la barre espace 
+   staa newKey
+   neg newKey
+   dec newKey 
+ 
+   ldaa newKey
+   staa oldKey 
+
    ldab #sceneGame
    jsr changeScene
    rts
@@ -63,4 +106,4 @@ actionFireNextLevel
 endActionNextLevel
    rts
 
-textNextLevel byte "YOU WIN",0
+textNextLevel byte "BRAVO !",0

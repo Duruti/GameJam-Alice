@@ -18,7 +18,7 @@ initGame
    jsr BUSY
 
    ; efface l'écran
-;   jsr $fbd4
+ ;   jsr $fbd4
    ldaa #-3
    staa colonneMap
    ldaa #8
@@ -57,7 +57,7 @@ initGame
    jsr drawText
 
    ldx #textLevel
-   ldd #$091D
+   ldd #$081D
    jsr drawText
 
    clra 
@@ -93,6 +93,19 @@ initGame
    rts 
 updateGame
    ; jsr vbl
+   ;  ldaa #15
+   ; staa R6
+   ; ldaa #10
+   ; staa R7
+   ; ldaa $09
+   ; staa R1
+   ; ldaa #%00100000
+   ; staa R2
+   ; ldaa #%00100000
+   ; staa R3
+   ; ldaa #0
+   ; staa R0+EXEC
+
    jsr AnimSprite
   
    ldaa statusAutomaticMove
@@ -423,8 +436,8 @@ endIsWin
    rts 
 controlIfBonusIsOk
    ldab scoreBonus
-   cmpb #18 
-   beq nextIsWin 
+   cmpb #15 
+   bge nextIsWin 
    ; ici on change la scene 
    ldab #sceneNoBonus
    jsr changeScene
@@ -609,4 +622,4 @@ getIdAutomaticMove
 
 textGame byte "SCENE GAME",0
 textBonus byte "BONUS",0
-textLevel byte "LEVEL",0
+textLevel byte "NIVEAU",0

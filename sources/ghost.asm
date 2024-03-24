@@ -363,6 +363,8 @@ restoreBackgroundGhost
    jsr getPosition
 
    jsr getIdSpriteGhost
+   cmpa #idPiege
+   beq drawVideGhost
    cmpa #1
    ble drawVideGhost
    psha
