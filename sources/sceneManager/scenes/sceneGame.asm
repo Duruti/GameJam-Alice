@@ -67,7 +67,7 @@ initGame
    jsr drawScoreBonus
    jsr drawCurrentLevel
 
-   ldaa $74
+   ldaa #$74
    staa idSpritePerso
    ldaa scoreBonus 
    staa saveScoreBonus
@@ -90,6 +90,10 @@ initGame
    
    jsr drawLogo
 
+   jsr getKey 
+   ldaa newKey
+   staa oldKey
+ 
    rts 
 updateGame
    ; jsr vbl
@@ -139,8 +143,11 @@ endUpdateGame
 jmpMovePlayerAutomatic
    jmp MovePlayerAutomatic
 controlKey
+  
+  
+ 
    ldaa newKey
-   cmpa oldKey ;#%11111111 
+   cmpa oldKey 
    beq suiteUpdateGame
    ldaa newKey
    cmpa #%11111111
@@ -462,17 +469,17 @@ exitGame
    jsr changeScene
    rts
 drawScoreBonus
-   ldaa colorTextHub
-   staa $FB
-   ldd #$161E
+   ldaa #colorTextHub
+   staa $FB ; fixe la couleur
+   ldd #$161E ; les coordonnées
    std $3280
    ldab scoreBonus
    clra 
 
-   jsr $F419
+   jsr $F419 ; routine pour afficher un nombre
    rts
 drawCurrentLevel
-   ldaa colorTextHub
+   ldaa #colorTextHub
    staa $FB
    ldd #$160F
    std $3280

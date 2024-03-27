@@ -13,7 +13,7 @@ DEBUG equ 0
 sceneStart = sceneMenu
 std equ 1
 cart equ 2
-mode equ std  ; ici on choisi le type d'export
+mode equ cart  ; ici on choisi le type d'export
 
  if mode=std
   echo "std"
@@ -389,10 +389,10 @@ sizeVariable = endVariable-startVariable
  echo "size DATA ",sizeLevel + sizeSprite + sizeVariable
  echo "Total Size ",sizeCode + sizeLevel + sizeSprite + sizeVariable
  echo "***** DEBUG INFO  ***** "
- echo "TOF : ",TOFInterrupt
+ echo "start GFX : ",dataSprite
  echo "variable : ", startVariable
  echo "level : ",dataLevel
-
+ echo "drawBonus ",debugMXC
 ;  echo "Y ",Ypos 
 ;  echo "currentmap ",currentMapSprite 
 ;  echo "StatusMove ",statusAutomaticMove

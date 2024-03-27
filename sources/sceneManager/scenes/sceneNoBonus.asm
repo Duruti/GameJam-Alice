@@ -123,7 +123,7 @@ initAnimCat
 
 exitNoBonus
 
-   ldaa #%10 ; force la barre espace 
+   ldaa #%1 ; force la barre espace 
    staa newKey
    neg newKey
    dec newKey 

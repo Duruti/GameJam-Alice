@@ -74,7 +74,7 @@ testJoyGameOver
    rts 
   
 exitGameOver
-   ldaa #%10
+   ldaa #%1
    staa newKey
    neg newKey
    dec newKey 

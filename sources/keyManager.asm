@@ -99,9 +99,73 @@ testEspace
    staa PORT1
    ldaa IO ; on récupere les infos dans IO
    anda #%00001000 ; on test le bit 3 , si il vaut 0 alors 
-   bne endTest
+   bne testArrowRight
    ; mets le bit 3 de newKey a 1  
    ldaa #%1
+   oraa newKey
+   staa newKey
+
+testArrowRight
+   ldaa #$DF ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
+   staa PORT1
+   ldaa PORT2 ; on récupere les infos dans Le port2
+   anda #%10 ; %01000000 ; on test le bit 1 , si il vaut 0 alors 
+   bne testArrowLeft ; test suivant
+   ; mets le bit 3 de newKey a 1  
+   ldaa #%10
+   oraa newKey
+   staa newKey
+
+testArrowLeft
+   ldaa #$F7 ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
+   staa PORT1
+   ldaa PORT2 ; on récupere les infos dans Le port2
+   anda #%10 ; %01000000 ; on test le bit 1 , si il vaut 0 alors 
+   bne testArrowUp ; test suivant
+   ; mets le bit 3 de newKey a 1  
+   ldaa #%1000
+   oraa newKey
+   staa newKey
+
+testArrowUp
+   ldaa #$BF ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
+   staa PORT1
+   ldaa PORT2 ; on récupere les infos dans Le port2
+   anda #%10 ; %01000000 ; on test le bit 1 , si il vaut 0 alors 
+   bne testControlZ ; test suivant
+   ; mets le bit 3 de newKey a 1  
+   ldaa #%10000
+   oraa newKey
+   staa newKey
+
+testControlZ ; pour Up
+   ldaa #$FE ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
+   staa PORT1
+   ldaa PORT2 ; on récupere les infos dans Le port2
+   anda #%10 ; %01000000 ; on test le bit 1 , si il vaut 0 alors 
+   bne testArrowDown ; test suivant
+   ; mets le bit 3 de newKey a 1  
+ 
+   ; Z 
+   ldaa #$7F ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
+   staa PORT1
+   ldaa IO ; on récupere les infos dans IO
+   anda #%00000100 ; on test le bit 2 , si il vaut 0 alors 
+   bne testArrowDown ; test suivant
+   ; mets le bit 3 de newKey a 1  
+   ldaa #%10000
+   oraa newKey
+   staa newKey
+ 
+
+testArrowDown
+   ldaa #$EF ; précise quelle colonne on veut, ici la 1 en mettant a 0 le bit 1
+   staa PORT1
+   ldaa PORT2 ; on récupere les infos dans Le port2
+   anda #%10 ; %01000000 ; on test le bit 1 , si il vaut 0 alors 
+   bne endTest ; test suivant
+   ; mets le bit 3 de newKey a 1  
+   ldaa #%100
    oraa newKey
    staa newKey
 
